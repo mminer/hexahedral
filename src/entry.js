@@ -1,189 +1,191 @@
 import './main.css';
 import d3 from 'd3';
+import * as keyCodes from 'key-codes';
+import * as tileCodes from 'tile-codes';
 
-const KEYCODE_LEFT = 37;
-const KEYCODE_UP = 38;
-const KEYCODE_RIGHT = 39;
-const KEYCODE_DOWN = 40;
-
-let squareSize = 10;
-
-let playerData = {
-  x: 0,
-  y: 2,
-};
-
-const SWITCH_ON = '0';
-const SWITCH_OFF = '_';
-const SWITCH_BROKEN = 'X';
+// Width and height of level squares.
+const CELL_SIZE = 10;
 
 let level = [];
-let squareData = [];
-
-d3.select('body')
-  .on('keydown', handleKeyDown)
-  .on('keyup', handleKeyUp);
-
-let needsUpdate = true;
+let keysCurrentlyPressed = new Set();
+let player = { row: 2, column: 0 };
 
 const keyHandlers = {
-  [KEYCODE_LEFT] () {
-    movePlayer(-1, 0);
+  [keyCodes.LEFT] () {
+    move(0, -1);
   },
 
-  [KEYCODE_UP] () {
-    movePlayer(0, -1);
+  [keyCodes.UP] () {
+    move(-1, 0);
   },
 
-  [KEYCODE_RIGHT] () {
-    movePlayer(1, 0);
+  [keyCodes.RIGHT] () {
+    move(0, 1);
   },
 
-  [KEYCODE_DOWN] () {
-    movePlayer(0, 1);
+  [keyCodes.DOWN] () {
+    move(1, 0);
   },
 };
 
-let keysCurrentlyPressed = new Set();
-
-function canPlayerMoveToPosition (x, y) {
-  let outOfBounds = (y < 0) || (x < 0) ||
-    (y >= level.length) || (x >= level[0].length);
-
-  if (outOfBounds) {
-    return false;
-  }
-
-  let squareType = level[y][x];
-  let canMove = (squareType === SWITCH_ON) || (squareType === SWITCH_OFF);
-  return canMove;
-}
-
-function movePlayer (deltaX, deltaY) {
-  let newX = playerData.x + deltaX;
-  let newY = playerData.y + deltaY;
-
-  if (!canPlayerMoveToPosition(newX, newY)) {
-    return;
-  }
-
-  playerData.x = newX;
-  playerData.y = newY;
-  toggleSwitch(newX, newY);
-  needsUpdate = true;
-}
-
-function getSquare (x, y) {
-  let square = squareData.find(square => square.x === x && square.y === y);
-  return square;
-}
-
-function toggleSwitch (x, y) {
-  let square = getSquare(x, y);
-  console.assert(square.type === SWITCH_ON || square.type === SWITCH_OFF);
-
-  switch (square.type) {
-    case SWITCH_ON:
-      square.type = SWITCH_OFF;
-      break;
-
-    case SWITCH_OFF:
-      square.type = SWITCH_ON;
-      break;
-  }
-}
-
-function didWin () {
-  let unswitchedRemain = squareData.some(square => square.type === SWITCH_OFF);
-  let win = !unswitchedRemain;
-  return win;
-}
-
+// Responds to keydown events.
 function handleKeyDown () {
-  let { event } = d3;
-  let { keyCode } = event;
-  let keyHandler = keyHandlers[keyCode];
-
-  // Ignore keys that we lack a handler for.
-  if (!keyHandler) {
-    return;
-  }
+  let keyCode = d3.event.keyCode;
 
   // Prevent keys from repeating.
   if (keysCurrentlyPressed.has(keyCode)) {
     return;
   }
 
-  event.preventDefault();
-  event.stopPropagation();
+  let handler = keyHandlers[keyCode];
 
+  // Ignore keys that we lack a handler for.
+  if (!handler) {
+    return;
+  }
+
+  handler();
   keysCurrentlyPressed.add(keyCode);
-  keyHandler();
   update();
+
+  d3.event.preventDefault();
+  d3.event.stopPropagation();
 }
 
+// Responds to keyup events.
 function handleKeyUp () {
   keysCurrentlyPressed.delete(d3.event.keyCode);
 }
 
-function update () {
-  if (!needsUpdate) {
+// Moves the player up, down, left, or right.
+function move (rowDelta, columnDelta) {
+  let newRow = player.row + rowDelta;
+  let newColumn = player.column + columnDelta;
+
+  if (!canMoveTo(newRow, newColumn)) {
     return;
   }
 
+  player.row = newRow;
+  player.column = newColumn;
+  toggleTile(newRow, newColumn);
+}
+
+// Determines whether the player is allowed to move to the given coordinates.
+function canMoveTo (row, column) {
+  let outOfBounds = (row < 0) || (column < 0) ||
+    (row >= level.length) || (column >= level[0].length);
+
+  if (outOfBounds) {
+    return false;
+  }
+
+  let tile = level[row][column];
+
+  switch (tile) {
+    case tileCodes.ON:
+    case tileCodes.OFF:
+      return true;
+
+    default:
+      return false;
+  }
+}
+
+// Switches ON tile to OFF; OFF tile to ON.
+function toggleTile (row, column) {
+  let tile = level[row][column];
+
+  switch (tile) {
+    case tileCodes.ON:
+      level[row][column] = tileCodes.OFF;
+      break;
+
+    case tileCodes.OFF:
+      level[row][column] = tileCodes.ON;
+      break;
+
+    default:
+      throw new Error('Tile should either be ON or OFF; received ${tile}.');
+  }
+}
+
+// Determines whether the win conditions have been met.
+function didWin () {
+  let offTilesRemain = level
+    // Flatten.
+    .reduce((tileArray, rowTiles) => tileArray.concat(rowTiles), [])
+    .some(tile => tile === tileCodes.OFF)
+
+  let win = !offTilesRemain;
+  return win;
+}
+
+// Redraws the level and player.
+function update () {
   let wrapper = d3.select('#wrapper').style({
-    height: `${level.length * squareSize}rem`,
-    width: `${level[0].length * squareSize}rem`,
+    height: `${level.length * CELL_SIZE}rem`,
+    width: `${level[0].length * CELL_SIZE}rem`,
   });
 
-  // Squares:
-
-  let squares = wrapper.selectAll('.square').data(squareData);
-
-  // Enter
-  squares.enter().append('div')
-    .attr('class', 'square')
-    .style({
-      height: `${squareSize}rem`,
-      left: d => `${d.x * squareSize}rem`,
-      top: d => `${d.y * squareSize}rem`,
-      width: `${squareSize}rem`,
-    });
-
-  // Enter + Update
-  squares.classed({
-    'on': d => d.type === SWITCH_ON,
-    'off': d => d.type === SWITCH_OFF,
-    'broken': d => d.type === SWITCH_BROKEN,
-  });
+  updateLevel(wrapper);
+  updatePlayer(wrapper);
 
   // Player:
-
-  let player = wrapper.selectAll('.player').data([playerData]);
-
-  // Enter
-  player.enter().append('div')
-    .attr('class', 'player')
-    .style({
-      height: `${squareSize}rem`,
-      width: `${squareSize}rem`,
-    });
-
-  // Enter + Update
-  player.style({
-    left: d => `${d.x * squareSize}rem`,
-    top: d => `${d.y * squareSize}rem`,
-  });
-
   if (didWin()) {
     if (confirm('You won! Play again?')) {
       document.location.reload();
     }
   }
-
-  needsUpdate = false;
 }
 
+// Redraws the level.
+function updateLevel (wrapper) {
+  let selection = wrapper.selectAll('.cell').data(() => {
+    return level.reduce((cellArray, rowTiles, row) => {
+      let cells = rowTiles.map((tile, column) => ({ tile, row, column }));
+      return cellArray.concat(cells);
+    }, []);
+  });
+
+  // Enter
+  selection.enter().append('div')
+    .attr('class', 'cell')
+    .style({
+      height: `${CELL_SIZE}rem`,
+      left: d => `${d.column * CELL_SIZE}rem`,
+      top: d => `${d.row * CELL_SIZE}rem`,
+      width: `${CELL_SIZE}rem`,
+    });
+
+  // Enter + Update
+  selection.classed({
+    'on': d => d.tile === tileCodes.ON,
+    'off': d => d.tile === tileCodes.OFF,
+    'broken': d => d.tile === tileCodes.BROKEN,
+  });
+}
+
+// Redraws the player.
+function updatePlayer (wrapper) {
+  let selection = wrapper.selectAll('.player').data([player]);
+
+  // Enter
+  selection.enter().append('div')
+    .attr('class', 'player')
+    .style({
+      height: `${CELL_SIZE}rem`,
+      width: `${CELL_SIZE}rem`,
+    });
+
+  // Enter + Update
+  selection.style({
+    left: d => `${d.column * CELL_SIZE}rem`,
+    top: d => `${d.row * CELL_SIZE}rem`,
+  });
+}
+
+// Loads a new level.
 function loadLevel (levelNumber) {
   let url = `levels/${levelNumber}.txt`;
 
@@ -194,16 +196,22 @@ function loadLevel (levelNumber) {
       .filter(line => line.length > 0)
       .map(line => line.split(''));
 
-    // Flatten out level into array of square objects.
-    squareData = level.reduce((squareDataArray, row, y) => {
-      let rowSquareData = row.map((type, x) => ({ type, x, y }));
-      return squareDataArray.concat(rowSquareData);
-    }, []);
-
     update();
   });
 }
 
+// Gets the level number from the URL hash.
+function levelNumberFromHash () {
+  let levelNumber = location.hash.replace('#', '');
+  return levelNumber;
+}
 
-let levelNumber = location.hash.replace('#', '') || 1;
+// Initialization:
+
+d3.select('body').on({
+  keydown: handleKeyDown,
+  keyup: handleKeyUp,
+});
+
+let levelNumber = levelNumberFromHash() || 1;
 loadLevel(levelNumber);

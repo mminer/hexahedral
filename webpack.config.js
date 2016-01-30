@@ -34,6 +34,6 @@ module.exports = {
     return [cssnext];
   },
   resolve: {
-    modulesDirectories: ['node_modules'],
+    modulesDirectories: ['node_modules', 'src'],
   },
 };

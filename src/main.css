@@ -38,9 +38,9 @@ body {
   transition: all 0.2s;
 }
 
-.square,
-.square::after,
-.square::before {
+.cell,
+.cell::after,
+.cell::before {
   /* Helps hide the seams between the planes. */
   box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);
   content: '';
@@ -51,7 +51,7 @@ body {
   width: 10rem;
 }
 
-.square {
+.cell {
   position: absolute;
   transform: translateZ(10rem) scale(0.9);
   transform-style: preserve-3d;
