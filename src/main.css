@@ -20,13 +20,26 @@ html {
 
 body {
   display: flex;
+  flex-direction: column;
+  font-family: sans-serif;
 }
 
-#wrapper {
+header {
+  font-size: 1.8rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+main {
   margin: auto;
   position: relative;
   transform: rotateX(45deg) rotateZ(45deg);
   transform-style: preserve-3d;
+}
+
+footer {
+  padding: 1rem;
+  text-align: center;
 }
 
 .player {
