@@ -17,8 +17,6 @@ const SWITCH_ON = '0';
 const SWITCH_OFF = '_';
 const SWITCH_BROKEN = 'X';
 
-const wrapper = d3.select('#wrapper');
-
 let level = [];
 let squareData = [];
 
@@ -133,6 +131,11 @@ function update () {
     return;
   }
 
+  let wrapper = d3.select('#wrapper').style({
+    height: `${level.length * squareSize}rem`,
+    width: `${level[0].length * squareSize}rem`,
+  });
+
   // Squares:
 
   let squares = wrapper.selectAll('.square').data(squareData);
@@ -186,7 +189,10 @@ function loadLevel (levelNumber) {
 
   d3.text(url, data => {
     // Convert level data to matrix.
-    level = data.split('\n').map(line => line.split(''));
+    level = data.split('\n')
+      // Remove empty lines.
+      .filter(line => line.length > 0)
+      .map(line => line.split(''));
 
     // Flatten out level into array of square objects.
     squareData = level.reduce((squareDataArray, row, y) => {

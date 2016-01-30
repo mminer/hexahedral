@@ -1,4 +1,5 @@
 :root {
+  /* Colors */
   --player-color: #3498db;
   --switch-on-color: #2ecc71;
   --switch-off-color: #e74c3c;
@@ -6,8 +7,10 @@
 }
 
 html, body {
+  height: 100%;
   margin: 0;
   padding: 0;
+  width: 100%;
 }
 
 html {
@@ -15,33 +18,89 @@ html {
   font-size: 62.5%;
 }
 
+body {
+  display: flex;
+}
+
 #wrapper {
+  margin: auto;
   position: relative;
+  transform: rotateX(45deg) rotateZ(45deg);
+  transform-style: preserve-3d;
 }
 
 .player {
   background-color: var(--player-color);
-  border: 3px solid white;
   border-radius: 50%;
+  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);
   position: absolute;
+  transform: translateZ(14rem);
   transition: all 0.2s;
 }
 
-.square {
-  background-color: black;
-  border: 3px solid white;
+.square,
+.square::after,
+.square::before {
+  /* Helps hide the seams between the planes. */
+  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);
+  content: '';
+  float: left;
+  height: 10rem;
   position: absolute;
   transition: background-color 0.2s;
+  width: 10rem;
+}
+
+.square {
+  position: absolute;
+  transform: translateZ(10rem) scale(0.9);
+  transform-style: preserve-3d;
+
+  /* Left */
+  &::after {
+    transform: rotateX(-90deg) translateY(10rem);
+    transform-origin: 100% 100%;
+  }
+
+  /* Right */
+  &::before {
+    transform: rotateY(90deg) translateX(10rem);
+    transform-origin: 100% 0;
+  }
 
   &.on {
     background-color: var(--switch-on-color);
+
+    &::after {
+      background-color: color(var(--switch-on-color) shade(7%));
+    }
+
+    &::before {
+      background-color: color(var(--switch-on-color) shade(14%));
+    }
   }
 
   &.off {
     background-color: var(--switch-off-color);
+
+    &::after {
+      background-color: color(var(--switch-off-color) shade(7%));
+    }
+
+    &::before {
+      background-color: color(var(--switch-off-color) shade(14%));
+    }
   }
 
   &.broken {
     background-color: var(--switch-broken-color);
+
+    &::after {
+      background-color: color(var(--switch-broken-color) shade(7%));
+    }
+
+    &::before {
+      background-color: color(var(--switch-broken-color) shade(14%));
+    }
   }
 }
