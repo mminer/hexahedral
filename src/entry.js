@@ -17,23 +17,15 @@ const SWITCH_ON = '0';
 const SWITCH_OFF = '_';
 const SWITCH_BROKEN = 'X';
 
-let level = [
-  ['0', 'X', '_'],
-  ['_', '_', '_'],
-  ['0', 'X', '_'],
-];
+const wrapper = d3.select('#wrapper');
 
-// Flatten out level into array of square objects.
-let squareData = level.reduce((squareDataArray, row, y) => {
-  let rowSquareData = row.map((type, x) => ({ type, x, y }));
-  return squareDataArray.concat(rowSquareData);
-}, []);
+let level = [];
+let squareData = [];
 
 d3.select('body')
   .on('keydown', handleKeyDown)
   .on('keyup', handleKeyUp);
 
-const wrapper = d3.select('#wrapper');
 let needsUpdate = true;
 
 const keyHandlers = {
@@ -189,4 +181,23 @@ function update () {
   needsUpdate = false;
 }
 
-update();
+function loadLevel (levelNumber) {
+  let url = `levels/${levelNumber}.txt`;
+
+  d3.text(url, data => {
+    // Convert level data to matrix.
+    level = data.split('\n').map(line => line.split(''));
+
+    // Flatten out level into array of square objects.
+    squareData = level.reduce((squareDataArray, row, y) => {
+      let rowSquareData = row.map((type, x) => ({ type, x, y }));
+      return squareDataArray.concat(rowSquareData);
+    }, []);
+
+    update();
+  });
+}
+
+
+let levelNumber = location.hash.replace('#', '') || 1;
+loadLevel(levelNumber);

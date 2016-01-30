@@ -1,3 +1,10 @@
+:root {
+  --player-color: #3498db;
+  --switch-on-color: #2ecc71;
+  --switch-off-color: #e74c3c;
+  --switch-broken-color: #34495e;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -13,27 +20,28 @@ html {
 }
 
 .player {
-  background-color: blue;
-  border: 1px solid white;
+  background-color: var(--player-color);
+  border: 3px solid white;
   border-radius: 50%;
   position: absolute;
   transition: all 0.2s;
 }
 
 .square {
-  border: 1px solid white;
+  background-color: black;
+  border: 3px solid white;
   position: absolute;
   transition: background-color 0.2s;
 
   &.on {
-    background-color: green;
+    background-color: var(--switch-on-color);
   }
 
   &.off {
-    background-color: red;
+    background-color: var(--switch-off-color);
   }
 
   &.broken {
-    background-color: black;
+    background-color: var(--switch-broken-color);
   }
 }
