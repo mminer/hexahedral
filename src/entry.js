@@ -16,7 +16,9 @@ const SQUARE_SIZE = 10;
 const LOAD_NEXT_LEVEL_DELAY = 2000;
 
 const devMode = localStorage.getItem('devMode') === 'true';
+const loseAudio = document.getElementById('lose-audio');
 const moveAudio = document.getElementById('move-audio');
+const winAudio = document.getElementById('win-audio');
 
 let gameStatus = gameStatuses.PLAYING;
 let keysCurrentlyPressed = new Set();
@@ -128,9 +130,15 @@ function toggleTile (row, column) {
 function update () {
   if (winConditionsMet(tiles)) {
     gameStatus = gameStatuses.WON;
+    playSoundEffect(winAudio);
     loadNextLevelAfterDelay();
+
+    if (devMode) {
+      console.info(`Completed in ${moveCount} moves.`);
+    }
   } else if (moveCount >= maxMoves) {
     gameStatus = gameStatuses.LOST;
+    playSoundEffect(loseAudio);
     resetAfterDelay();
   }
 
