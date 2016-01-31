@@ -6,7 +6,7 @@ import {
   levelNumberFromHash,
   winConditionsMet,
 } from 'level-manager';
-import { findDistance } from 'util';
+import { findDistance, playSoundEffect } from 'util';
 import * as keyCodes from 'key-codes';
 import * as tileCodes from 'tile-codes';
 
@@ -21,6 +21,7 @@ let tiles = {};
 
 const moveCountElement = document.getElementById('move-count');
 const maxMovesElement = document.getElementById('max-moves');
+const moveAudio = document.getElementById('move-audio');
 
 const keyHandlers = {
   [keyCodes.LEFT] () {
@@ -97,6 +98,7 @@ function moveTo (row, column) {
   player.column = column;
   toggleTile(row, column);
   moveCount += 1;
+  playSoundEffect(moveAudio);
   update();
 }
 

@@ -5,3 +5,10 @@ export function findDistance (row1, column1, row2, column2) {
   let distance = rowDistance + columnDistance;
   return distance;
 }
+
+// Plays an audio clip from the beginning.
+export function playSoundEffect (audio) {
+  audio.pause();
+  audio.currentTime = 0;
+  audio.play();
+}
