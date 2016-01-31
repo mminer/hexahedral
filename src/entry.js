@@ -108,18 +108,18 @@ function moveTo (row, column) {
   update();
 }
 
-// Switches ON tile to OFF; OFF tile to ON.
+// Switches ON tile to UNPRESSED; UNPRESSED tile to PRESSED.
 function toggleTile (row, column) {
   let tile = tiles[row][column];
-  console.assert(tile === tileCodes.ON || tile === tileCodes.OFF);
+  console.assert(tile === tileCodes.PRESSED || tile === tileCodes.UNPRESSED);
 
   switch (tile) {
-    case tileCodes.ON:
-      tiles[row][column] = tileCodes.OFF;
+    case tileCodes.PRESSED:
+      tiles[row][column] = tileCodes.UNPRESSED;
       break;
 
-    case tileCodes.OFF:
-      tiles[row][column] = tileCodes.ON;
+    case tileCodes.UNPRESSED:
+      tiles[row][column] = tileCodes.PRESSED;
       break;
   }
 }
@@ -166,8 +166,8 @@ function updateLevel () {
   // Enter + Update
   selection
     .classed({
-      'on': d => d.tile === tileCodes.ON,
-      'off': d => d.tile === tileCodes.OFF,
+      'pressed': d => d.tile === tileCodes.PRESSED,
+      'unpressed': d => d.tile === tileCodes.UNPRESSED,
       'broken': d => d.tile === tileCodes.BROKEN,
     })
     .on('click', d => moveTo(d.row, d.column))
@@ -238,7 +238,7 @@ function updateMoveCounter () {
       .style('width', '0px')
     .transition()
       .duration(200)
-      .style('width', '1rem')
+      .style('width', '2rem')
 
   // Enter + Update
   selection

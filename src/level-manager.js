@@ -11,7 +11,7 @@ export function canMoveTo (tiles, row, column) {
   }
 
   let tile = tiles[row][column];
-  let canMove = (tile === tileCodes.ON) || (tile === tileCodes.OFF);
+  let canMove = (tile === tileCodes.PRESSED) || (tile === tileCodes.UNPRESSED);
   return canMove;
 }
 
@@ -26,7 +26,7 @@ export function winConditionsMet (tiles) {
   let offTilesRemain = tiles
     // Flatten.
     .reduce((tileArray, rowTiles) => tileArray.concat(rowTiles), [])
-    .some(tile => tile === tileCodes.OFF)
+    .some(tile => tile === tileCodes.UNPRESSED)
 
   let conditionsMet = !offTilesRemain;
   return conditionsMet;

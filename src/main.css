@@ -1,21 +1,26 @@
 :root {
-  --cell-size: 9rem;
-  --player-size: 4rem;
-  --square-size: 10rem;
+  --global-opacity: 0.95;
 
   /* Colors */
-  --bg-color: #ecf0f1;
-  --player-color: #3498db;
-  --switch-on-color: #2ecc71;
-  --switch-off-color: #e74c3c;
-  --switch-broken-color: #34495e;
+  --beige: #CCB6A0;
+  --blue: #00B3C5;
+  --dark-gray: #433C38;
+  --green: #6EBD4B;
+  --pink: #D32D8F;
+
+  /* Sizes */
+  --cell-size: 9rem;
+  --counter-size: 2rem;
+  --level-button-size: 2rem;
+  --player-size: 4rem;
+  --square-size: 10rem;
 }
 
 @keyframes player-bob {
   50% { transform: translateZ(13rem); }
 }
 
-@keyframes off-breathe {
+@keyframes unpressed-breathe {
   50% { transform: translateZ(8rem) scale(0.95); }
 }
 
@@ -39,13 +44,13 @@ html {
 }
 
 body {
-  background-color: var(--bg-color);
-  background-image: radial-gradient(circle, white, var(--bg-color));
+  background-color: var(--dark-gray);
+  background-image: radial-gradient(circle, var(--dark-gray), black);
   display: flex;
   flex-direction: column;
   font-family: sans-serif;
   overflow: hidden;
-  padding: 1rem;
+  padding: 4rem;
   transition: filter 0.5s, opacity 1s;
 
   /* Fade in when game starts. */
@@ -69,10 +74,12 @@ button {
 }
 
 header {
-  border-radius: 0.5rem;
+  border: 2px solid white;
+  border-radius: var(--counter-size);
   display: flex;
   justify-content: center;
   margin: 0 auto;
+  opacity: var(--global-opacity);
   overflow: hidden;
 }
 
@@ -85,7 +92,7 @@ main {
 }
 
 nav {
-  margin-bottom: 1rem;
+  margin-bottom: 4rem;
   text-align: center;
 }
 
@@ -97,9 +104,10 @@ footer {
 .cell::after,
 .cell::before {
   /* Helps hide the seams between the planes. */
-  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);
+  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 100%, 1);
   content: '';
   height: var(--cell-size);
+  opacity: var(--global-opacity);
   position: absolute;
   transition: all 0.1s;
   width: var(--cell-size);
@@ -122,64 +130,67 @@ footer {
     transform-origin: 100% 0;
   }
 
-  &.on {
-    background-color: var(--switch-on-color);
+  &.pressed {
+    background-color: var(--blue);
 
     &::after {
-      background-color: color(var(--switch-on-color) shade(7%));
+      background-color: color(var(--blue) tint(7%));
     }
 
     &::before {
-      background-color: color(var(--switch-on-color) shade(14%));
+      background-color: color(var(--blue) tint(14%));
     }
   }
 
-  &.off {
-    animation: off-breathe 2s ease-in-out infinite;
-    background-color: var(--switch-off-color);
+  &.unpressed {
+    animation: unpressed-breathe 2s ease-in-out infinite;
+    background-color: var(--pink);
     transform: translateZ(8rem);
 
     &::after {
-      background-color: color(var(--switch-off-color) shade(7%));
+      background-color: color(var(--pink) tint(7%));
     }
 
     &::before {
-      background-color: color(var(--switch-off-color) shade(14%));
+      background-color: color(var(--pink) tint(14%));
     }
   }
 
   &.broken {
-    background-color: var(--switch-broken-color);
+    background-color: var(--beige);
 
     &::after {
-      background-color: color(var(--switch-broken-color) shade(7%));
+      background-color: color(var(--beige) tint(7%));
     }
 
     &::before {
-      background-color: color(var(--switch-broken-color) shade(14%));
+      background-color: color(var(--beige) tint(14%));
     }
   }
 }
 
 .counter {
-  background-color: var(--switch-on-color);
-  height: 1rem;
+  background-color: var(--blue);
+  height: var(--counter-size);
   transition: background-color 0.2s;
-  width: 1rem;
+  width: var(--counter-size);
 
   &.used {
-    background-color: var(--switch-broken-color);
+    background-color: var(--pink);
   }
 }
 
 .level-button {
+  background-color: var(--beige);
+  border: 2px solid white;
   border-radius: 50%;
-  border-width: 0;
-  height: 1rem;
+  cursor: default;
+  height: var(--level-button-size);
+  opacity: var(--global-opacity);
   padding: 0;
-  margin: 0 0.2rem;
+  margin: 0 0.5rem;
   transition: all 0.2s;
-  width: 1rem;
+  width: var(--level-button-size);
 
   /* Hide text. */
   text-indent: 100%;
@@ -187,12 +198,16 @@ footer {
   white-space: nowrap;
 
   &.complete {
-    background-color: var(--switch-on-color);
+    background-color: var(--blue);
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.2);
+    }
   }
 
   &.current {
-    background-color: var(--switch-broken-color);
-    cursor: default;
+    background-color: var(--pink);
   }
 }
 
@@ -200,9 +215,10 @@ footer {
 .player::after,
 .player::before {
   /* Helps hide the seams between the planes. */
-  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);
+  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 100%, 1);
   content: '';
   height: var(--player-size);
+  opacity: var(--global-opacity);
   position: absolute;
   transition: all 0.1s;
   width: var(--player-size);
@@ -210,8 +226,7 @@ footer {
 
 .player {
   animation: player-bob 2s ease-in-out infinite;
-  background-color: var(--player-color);
-  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);
+  background-color: var(--green);
   margin: 3.5rem;
   pointer-events: none;
   transform-style: preserve-3d;
@@ -220,14 +235,14 @@ footer {
 
   /* Left */
   &::after {
-    background-color: color(var(--player-color) shade(7%));
+    background-color: color(var(--green) shade(7%));
     transform: rotateX(-90deg) translateY(var(--player-size));
     transform-origin: 100% 100%;
   }
 
   /* Right */
   &::before {
-    background-color: color(var(--player-color) shade(14%));
+    background-color: color(var(--green) shade(14%));
     transform: rotateY(90deg) translateX(var(--player-size));
     transform-origin: 100% 0;
   }
@@ -236,5 +251,12 @@ footer {
 .reset-button {
   background-color: transparent;
   border-width: 0;
+  opacity: var(--global-opacity);
   padding: 1rem;
+  transform: scale(2);
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(2.4);
+  }
 }
