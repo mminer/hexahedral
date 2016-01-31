@@ -17,7 +17,7 @@ export function canMoveTo (tiles, row, column) {
 
 // Gets the level number from the URL hash.
 export function levelNumberFromHash () {
-  let levelNumber = location.hash.replace('#', '');
+  let levelNumber = parseInt(location.hash.replace('#', '') || 0);
   return levelNumber;
 }
 

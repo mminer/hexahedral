@@ -1,9 +1,27 @@
 :root {
+  --cell-width: 9rem;
+
   /* Colors */
+  --bg-color: #ecf0f1;
   --player-color: #3498db;
   --switch-on-color: #2ecc71;
   --switch-off-color: #e74c3c;
   --switch-broken-color: #34495e;
+}
+
+@keyframes player-bob {
+  50% { transform: translateZ(12rem); }
+}
+
+@keyframes off-breathe {
+  50% { transform: translateZ(8rem) scale(0.95); }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  outline: none;
 }
 
 html, body {
@@ -19,15 +37,25 @@ html {
 }
 
 body {
+  background-color: var(--bg-color);
+  background-image: radial-gradient(circle, white, var(--bg-color));
   display: flex;
   flex-direction: column;
   font-family: sans-serif;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+button {
+  cursor: pointer;
 }
 
 header {
-  font-size: 1.8rem;
-  padding: 1rem;
-  text-align: center;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  overflow: hidden;
 }
 
 main {
@@ -35,21 +63,16 @@ main {
   position: relative;
   transform: rotateX(45deg) rotateZ(45deg);
   transform-style: preserve-3d;
+  transition: all 0.2s;
 }
 
-footer {
-  padding: 1rem;
+nav {
+  margin-bottom: 1rem;
   text-align: center;
 }
 
-.player {
-  background-color: var(--player-color);
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);
-  pointer-events: none;
-  position: absolute;
-  transform: translateZ(14rem);
-  transition: all 0.2s;
+footer {
+  text-align: center;
 }
 
 .cell,
@@ -58,27 +81,25 @@ footer {
   /* Helps hide the seams between the planes. */
   box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);
   content: '';
-  height: 10rem;
+  height: var(--cell-width);
   position: absolute;
-  transition: background-color 0.2s;
-  width: 10rem;
+  transition: all 0.1s;
+  width: var(--cell-width);
 }
 
 .cell {
-  position: absolute;
-  transform: translateZ(5rem) scale(0.9);
+  transform: translateZ(5rem);
   transform-style: preserve-3d;
-  transition: transform 0.1s;
 
   /* Left */
   &::after {
-    transform: rotateX(-90deg) translateY(10rem);
+    transform: rotateX(-90deg) translateY(var(--cell-width));
     transform-origin: 100% 100%;
   }
 
   /* Right */
   &::before {
-    transform: rotateY(90deg) translateX(10rem);
+    transform: rotateY(90deg) translateX(var(--cell-width));
     transform-origin: 100% 0;
   }
 
@@ -95,8 +116,9 @@ footer {
   }
 
   &.off {
+    animation: off-breathe 2s ease-in-out infinite;
     background-color: var(--switch-off-color);
-    transform: translateZ(6rem) scale(0.9);
+    transform: translateZ(8rem);
 
     &::after {
       background-color: color(var(--switch-off-color) shade(7%));
@@ -118,4 +140,55 @@ footer {
       background-color: color(var(--switch-broken-color) shade(14%));
     }
   }
+}
+
+.counter {
+  background-color: var(--switch-on-color);
+  height: 1rem;
+  transition: background-color 0.2s;
+  width: 1rem;
+
+  &.used {
+    background-color: var(--switch-broken-color);
+  }
+}
+
+.level-button {
+  border-radius: 50%;
+  border-width: 0;
+  height: 1rem;
+  padding: 0;
+  margin: 0 0.2rem;
+  transition: all 0.2s;
+  width: 1rem;
+
+  /* Hide text. */
+  text-indent: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+
+  &.complete {
+    background-color: var(--switch-on-color);
+  }
+
+  &.current {
+    background-color: var(--switch-broken-color);
+  }
+}
+
+.player {
+  animation: player-bob 2s ease-in-out infinite;
+  background-color: var(--player-color);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);
+  pointer-events: none;
+  position: absolute;
+  transform: translateZ(14rem);
+  transition: all 0.2s;
+}
+
+.reset-button {
+  background-color: transparent;
+  border-width: 0;
+  padding: 1rem;
 }

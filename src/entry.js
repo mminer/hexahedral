@@ -12,6 +12,8 @@ import * as tileCodes from 'tile-codes';
 
 // Width and height of level squares.
 const CELL_SIZE = 10;
+const CELL_SPACING = 1;
+const CELL_WIDTH = CELL_SIZE - CELL_SPACING;
 
 let keysCurrentlyPressed = new Set();
 let maxMoves = Infinity;
@@ -19,8 +21,6 @@ let moveCount = 0;
 let player = {};
 let tiles = {};
 
-const moveCountElement = document.getElementById('move-count');
-const maxMovesElement = document.getElementById('max-moves');
 const moveAudio = document.getElementById('move-audio');
 
 const keyHandlers = {
@@ -120,24 +120,18 @@ function toggleTile (row, column) {
 
 // Redraws the level and player.
 function update () {
-  let container = d3.select('main').style({
-    height: `${tiles.length * CELL_SIZE}rem`,
-    width: `${tiles[0].length * CELL_SIZE}rem`,
+  let rowCount = tiles.length;
+  let columnCount = tiles[0].length;
+
+  d3.select('main').style({
+    height: `${rowCount * CELL_SIZE}rem`,
+    width: `${columnCount * CELL_SIZE}rem`,
   });
 
-  updateLevel(container);
+  updateLevel();
+  updateLevelNavigator();
   updateMoveCounter();
-  updatePlayer(container);
-
-  let moveCountExceeded = moveCount > maxMoves;
-
-  if (moveCountExceeded) {
-    let message = 'Maximum moves exceeded! Play again?';
-
-    if (confirm(message)) {
-      reset();
-    }
-  }
+  updatePlayer();
 
   if (winConditionsMet(tiles)) {
     let message = `You won in ${moveCount} moves. Play again?`;
@@ -146,11 +140,21 @@ function update () {
       reset();
     }
   }
+
+  let maxMovesMet = moveCount >= maxMoves;
+
+  if (maxMovesMet) {
+    let message = 'Maximum moves exceeded! Play again?';
+
+    if (confirm(message)) {
+      reset();
+    }
+  }
 }
 
 // Redraws the level.
-function updateLevel (container) {
-  let selection = container.selectAll('.cell').data(() => {
+function updateLevel () {
+  let selection = d3.select('main').selectAll('.cell').data(() => {
     return tiles.reduce((cellArray, rowTiles, row) => {
       let cells = rowTiles.map((tile, column) => ({ tile, row, column }));
       return cellArray.concat(cells);
@@ -160,31 +164,90 @@ function updateLevel (container) {
   // Enter
   selection.enter().append('div')
     .attr('class', 'cell')
-    .on('click', d => moveTo(d.row, d.column))
     .style({
-      height: `${CELL_SIZE}rem`,
-      left: d => `${d.column * CELL_SIZE}rem`,
-      top: d => `${d.row * CELL_SIZE}rem`,
-      width: `${CELL_SIZE}rem`,
+      height: `${CELL_WIDTH}rem`,
+      width: `${CELL_WIDTH}rem`,
     });
 
   // Enter + Update
-  selection.classed({
-    'on': d => d.tile === tileCodes.ON,
-    'off': d => d.tile === tileCodes.OFF,
-    'broken': d => d.tile === tileCodes.BROKEN,
+  selection
+    .classed({
+      'on': d => d.tile === tileCodes.ON,
+      'off': d => d.tile === tileCodes.OFF,
+      'broken': d => d.tile === tileCodes.BROKEN,
+    })
+    .on('click', d => moveTo(d.row, d.column))
+    .style({
+      left: d => `${d.column * CELL_SIZE + CELL_SPACING}rem`,
+      top: d => `${d.row * CELL_SIZE + CELL_SPACING}rem`,
+    });
+
+  // Exit
+  selection.exit().remove();
+}
+
+// Redraws the level navigator.
+function updateLevelNavigator () {
+  let currentLevelNumber = levelNumberFromHash();
+
+  let data = d3.range(levels.length).map(levelNumber => {
+    return {
+      complete: currentLevelNumber > levelNumber,
+      current: currentLevelNumber === levelNumber,
+      levelNumber,
+    };
   });
+
+  let selection = d3.select('nav').selectAll('.level-button').data(data);
+
+  // Enter
+  selection.enter().append('button')
+    .attr({
+      'class': 'level-button',
+      'title': d => `Level ${d.levelNumber}`,
+      'type': 'button',
+    })
+    .on('click', d => loadLevel(d.levelNumber))
+    .text(d => d.levelNumber);
+
+  // Enter + Update
+  selection.classed({
+    'complete': d => d.complete,
+    'current': d => d.current,
+  });
+
+  // Exit
+  selection.exit().remove();
 }
 
 // Redraws the move counter.
 function updateMoveCounter () {
-  moveCountElement.innerText = moveCount;
-  maxMovesElement.innerText = maxMoves;
+  let data = d3.range(maxMoves).map(move => ({ used: moveCount > move }));
+  let selection = d3.select('header').selectAll('.counter').data(data);
+
+  // Enter
+  selection.enter().append('div')
+      .attr('class', 'counter')
+      .style('width', '0px')
+    .transition()
+      .duration(200)
+      .style('width', '1rem')
+
+  // Enter + Update
+  selection
+    .attr('title', `Move ${moveCount} of ${maxMoves}`)
+    .classed('used', d => d.used);
+
+  // Exit
+  selection.exit().transition()
+    .duration(200)
+    .style('width', '0px')
+    .remove();
 }
 
 // Redraws the player.
 function updatePlayer (container) {
-  let selection = container.selectAll('.player').data([player]);
+  let selection = d3.select('main').selectAll('.player').data([player]);
 
   // Enter
   selection.enter().append('div')
@@ -201,9 +264,22 @@ function updatePlayer (container) {
   });
 }
 
-// Resets the game.
+// Loads the given level.
+function loadLevel (levelNumber) {
+  let levelExists = levelNumber in levels;
+
+  if (!levelExists) {
+    alert(`There is no level ${levelNumber}.`);
+    return;
+  }
+
+  location.hash = levelNumber;
+  reset();
+}
+
+// Loads the level.
 function reset () {
-  let levelNumber = levelNumberFromHash() || 0;
+  let levelNumber = levelNumberFromHash();
   let level = levels[levelNumber];
 
   // Make copy of level tiles.
@@ -219,5 +295,5 @@ function reset () {
 
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
-document.getElementById('reset').onclick = reset;
+document.getElementsByClassName('reset-button')[0].onclick = reset;
 reset();
