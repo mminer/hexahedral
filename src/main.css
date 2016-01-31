@@ -74,6 +74,7 @@ button {
 }
 
 header {
+  background-color: var(--blue);
   border: 2px solid white;
   border-radius: var(--counter-size);
   display: flex;
@@ -109,6 +110,7 @@ footer {
   height: var(--cell-size);
   opacity: var(--global-opacity);
   position: absolute;
+  touch-action: manipulation;
   transition: all 0.1s;
   width: var(--cell-size);
 }
@@ -172,7 +174,6 @@ footer {
 .counter {
   background-color: var(--blue);
   height: var(--counter-size);
-  transition: background-color 0.2s;
   width: var(--counter-size);
 
   &.used {

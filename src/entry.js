@@ -1,5 +1,6 @@
 import './main.css';
 import d3 from 'd3';
+import fastClick from 'fastclick';
 import levels from 'levels';
 import {
   canMoveTo,
@@ -23,7 +24,6 @@ let maxMoves = Infinity;
 let moveCount = 0;
 let player = {};
 let tiles = {};
-
 
 const keyHandlers = {
   [keyCodes.LEFT] () {
@@ -311,6 +311,7 @@ function reset () {
 
 // Initialization:
 
+fastClick.attach(document.body);
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
 document.getElementsByClassName('reset-button')[0].onclick = reset;
