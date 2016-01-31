@@ -74,14 +74,8 @@ button {
 }
 
 header {
-  background-color: var(--blue);
-  border: 2px solid white;
-  border-radius: var(--counter-size);
   display: flex;
   justify-content: center;
-  margin: 0 auto;
-  opacity: var(--global-opacity);
-  overflow: hidden;
 }
 
 main {
@@ -99,6 +93,17 @@ nav {
 
 footer {
   text-align: center;
+}
+
+#move-counter {
+  background-color: var(--blue);
+  border: 2px solid white;
+  border-radius: var(--counter-size);
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  opacity: var(--global-opacity);
+  overflow: hidden;
 }
 
 .cell,
@@ -254,10 +259,9 @@ footer {
   border-width: 0;
   opacity: var(--global-opacity);
   padding: 1rem;
-  transform: scale(2);
   transition: transform 0.2s;
 
   &:hover {
-    transform: scale(2.4);
+    transform: scale(1.2);
   }
 }

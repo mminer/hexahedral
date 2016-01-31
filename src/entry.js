@@ -229,7 +229,7 @@ function updateLevelNavigator () {
 // Redraws the move counter.
 function updateMoveCounter () {
   let data = d3.range(maxMoves).map(move => ({ used: moveCount > move }));
-  let selection = d3.select('header').selectAll('.counter').data(data);
+  let selection = d3.select('#move-counter').selectAll('.counter').data(data);
 
   // Enter
   selection.enter().append('div')
