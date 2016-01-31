@@ -11,12 +11,11 @@ import * as keyCodes from 'key-codes';
 import * as tileCodes from 'tile-codes';
 import * as gameStatuses from 'game-statuses';
 
+const SQUARE_SIZE = 10;
 const LOAD_NEXT_LEVEL_DELAY = 2000;
 
-// Width and height of level squares.
-const CELL_SIZE = 10;
-const CELL_SPACING = 1;
-const CELL_WIDTH = CELL_SIZE - CELL_SPACING;
+const devMode = localStorage.getItem('devMode') === 'true';
+const moveAudio = document.getElementById('move-audio');
 
 let gameStatus = gameStatuses.PLAYING;
 let keysCurrentlyPressed = new Set();
@@ -25,7 +24,6 @@ let moveCount = 0;
 let player = {};
 let tiles = {};
 
-const moveAudio = document.getElementById('move-audio');
 
 const keyHandlers = {
   [keyCodes.LEFT] () {
@@ -143,8 +141,8 @@ function update () {
 
   d3.select('main')
     .style({
-      height: `${rowCount * CELL_SIZE}rem`,
-      width: `${columnCount * CELL_SIZE}rem`,
+      height: `${rowCount * SQUARE_SIZE}rem`,
+      width: `${columnCount * SQUARE_SIZE}rem`,
     });
 
   updateLevel();
@@ -163,12 +161,7 @@ function updateLevel () {
   });
 
   // Enter
-  selection.enter().append('div')
-    .attr('class', 'cell')
-    .style({
-      height: `${CELL_WIDTH}rem`,
-      width: `${CELL_WIDTH}rem`,
-    });
+  selection.enter().append('div').attr('class', 'cell');
 
   // Enter + Update
   selection
@@ -179,8 +172,8 @@ function updateLevel () {
     })
     .on('click', d => moveTo(d.row, d.column))
     .style({
-      left: d => `${d.column * CELL_SIZE + CELL_SPACING}rem`,
-      top: d => `${d.row * CELL_SIZE + CELL_SPACING}rem`,
+      left: d => `${d.column * SQUARE_SIZE}rem`,
+      top: d => `${d.row * SQUARE_SIZE}rem`,
     });
 
   // Exit
@@ -208,7 +201,19 @@ function updateLevelNavigator () {
       'title': d => `Level ${d.levelNumber}`,
       'type': 'button',
     })
-    .on('click', d => loadLevel(d.levelNumber))
+    .on('click', d => {
+      // Do nothing when clicking on current level.
+      if (d.current) {
+        return;
+      }
+
+      // Only allow jumping to completed levels (unless we're in dev mode).
+      if (!devMode && !d.complete) {
+        return;
+      }
+
+      loadLevel(d.levelNumber);
+    })
     .text(d => d.levelNumber);
 
   // Enter + Update
@@ -229,6 +234,7 @@ function updateMoveCounter () {
   // Enter
   selection.enter().append('div')
       .attr('class', 'counter')
+      // Transition from 0px because a bug causes strange behaviour from 0rem.
       .style('width', '0px')
     .transition()
       .duration(200)
@@ -251,17 +257,12 @@ function updatePlayer (container) {
   let selection = d3.select('main').selectAll('.player').data([player]);
 
   // Enter
-  selection.enter().append('div')
-    .attr('class', 'player')
-    .style({
-      height: `${CELL_SIZE}rem`,
-      width: `${CELL_SIZE}rem`,
-    });
+  selection.enter().append('div').attr('class', 'player');
 
   // Enter + Update
   selection.style({
-    left: d => `${d.column * CELL_SIZE}rem`,
-    top: d => `${d.row * CELL_SIZE}rem`,
+    left: d => `${d.column * SQUARE_SIZE}rem`,
+    top: d => `${d.row * SQUARE_SIZE}rem`,
   });
 }
 
