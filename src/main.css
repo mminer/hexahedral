@@ -46,6 +46,7 @@ footer {
   background-color: var(--player-color);
   border-radius: 50%;
   box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);
+  pointer-events: none;
   position: absolute;
   transform: translateZ(14rem);
   transition: all 0.2s;
@@ -57,7 +58,6 @@ footer {
   /* Helps hide the seams between the planes. */
   box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);
   content: '';
-  float: left;
   height: 10rem;
   position: absolute;
   transition: background-color 0.2s;
@@ -66,8 +66,9 @@ footer {
 
 .cell {
   position: absolute;
-  transform: translateZ(10rem) scale(0.9);
+  transform: translateZ(5rem) scale(0.9);
   transform-style: preserve-3d;
+  transition: transform 0.1s;
 
   /* Left */
   &::after {
@@ -95,6 +96,7 @@ footer {
 
   &.off {
     background-color: var(--switch-off-color);
+    transform: translateZ(6rem) scale(0.9);
 
     &::after {
       background-color: color(var(--switch-off-color) shade(7%));

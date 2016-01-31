@@ -6,6 +6,7 @@ import {
   levelNumberFromHash,
   winConditionsMet,
 } from 'level-manager';
+import { findDistance } from 'util';
 import * as keyCodes from 'key-codes';
 import * as tileCodes from 'tile-codes';
 
@@ -15,7 +16,7 @@ const CELL_SIZE = 10;
 let keysCurrentlyPressed = new Set();
 let maxMoves = Infinity;
 let moveCount = 0;
-let player = { row: 2, column: 0 };
+let player = {};
 let tiles = {};
 
 const moveCountElement = document.getElementById('move-count');
@@ -37,6 +38,10 @@ const keyHandlers = {
   [keyCodes.DOWN] () {
     move(1, 0);
   },
+
+  [keyCodes.R] () {
+    reset();
+  },
 };
 
 // Responds to keydown events.
@@ -57,7 +62,6 @@ function handleKeyDown (event) {
 
   handler();
   keysCurrentlyPressed.add(keyCode);
-  update();
 
   event.preventDefault();
   event.stopPropagation();
@@ -72,15 +76,28 @@ function handleKeyUp (event) {
 function move (rowDelta, columnDelta) {
   let newRow = player.row + rowDelta;
   let newColumn = player.column + columnDelta;
+  moveTo(newRow, newColumn);
+}
 
-  if (!canMoveTo(tiles, newRow, newColumn)) {
+// Moves the player to a specific location.
+function moveTo (row, column) {
+  if (!canMoveTo(tiles, row, column)) {
     return;
   }
 
-  player.row = newRow;
-  player.column = newColumn;
-  toggleTile(newRow, newColumn);
+  let moveDistance = findDistance(player.row, player.column, row, column);
+  let invalidMoveDistance = moveDistance !== 1;
+
+  // Ensure player only move one spot at a time.
+  if (invalidMoveDistance) {
+    return;
+  }
+
+  player.row = row;
+  player.column = column;
+  toggleTile(row, column);
   moveCount += 1;
+  update();
 }
 
 // Switches ON tile to OFF; OFF tile to ON.
@@ -141,6 +158,7 @@ function updateLevel (container) {
   // Enter
   selection.enter().append('div')
     .attr('class', 'cell')
+    .on('click', d => moveTo(d.row, d.column))
     .style({
       height: `${CELL_SIZE}rem`,
       left: d => `${d.column * CELL_SIZE}rem`,
@@ -189,7 +207,7 @@ function reset () {
   // Make copy of level tiles.
   tiles = level.tiles.map(rowTiles => rowTiles.slice());
 
-  player = { row: 2, column: 0 };
+  player = Object.assign({}, level.player);
   maxMoves = level.maxMoves;
   moveCount = 0;
   update();
