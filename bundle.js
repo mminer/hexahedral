@@ -5321,31 +5321,31 @@
 
 	__webpack_require__(192);
 
-	var _d = __webpack_require__(195);
+	var _d = __webpack_require__(196);
 
 	var _d2 = _interopRequireDefault(_d);
 
-	var _fastclick = __webpack_require__(203);
+	var _fastclick = __webpack_require__(197);
 
 	var _fastclick2 = _interopRequireDefault(_fastclick);
 
-	var _levels = __webpack_require__(196);
+	var _levels = __webpack_require__(198);
 
 	var _levels2 = _interopRequireDefault(_levels);
 
-	var _levelManager = __webpack_require__(197);
+	var _levelManager = __webpack_require__(199);
 
-	var _util = __webpack_require__(199);
+	var _util = __webpack_require__(201);
 
-	var _keyCodes = __webpack_require__(200);
+	var _keyCodes = __webpack_require__(202);
 
 	var keyCodes = _interopRequireWildcard(_keyCodes);
 
-	var _tileCodes = __webpack_require__(198);
+	var _tileCodes = __webpack_require__(200);
 
 	var tileCodes = _interopRequireWildcard(_tileCodes);
 
-	var _gameStatuses = __webpack_require__(201);
+	var _gameStatuses = __webpack_require__(203);
 
 	var gameStatuses = _interopRequireWildcard(_gameStatuses);
 
@@ -5359,7 +5359,9 @@
 	var LOAD_NEXT_LEVEL_DELAY = 2000;
 
 	var devMode = localStorage.getItem('devMode') === 'true';
+	var loseAudio = document.getElementById('lose-audio');
 	var moveAudio = document.getElementById('move-audio');
+	var winAudio = document.getElementById('win-audio');
 
 	var gameStatus = gameStatuses.PLAYING;
 	var keysCurrentlyPressed = new Set();
@@ -5461,9 +5463,15 @@
 	function update() {
 	  if ((0, _levelManager.winConditionsMet)(tiles)) {
 	    gameStatus = gameStatuses.WON;
+	    (0, _util.playSoundEffect)(winAudio);
 	    loadNextLevelAfterDelay();
+
+	    if (devMode) {
+	      console.info('Completed in ' + moveCount + ' moves.');
+	    }
 	  } else if (moveCount >= maxMoves) {
 	    gameStatus = gameStatuses.LOST;
+	    (0, _util.playSoundEffect)(loseAudio);
 	    resetAfterDelay();
 	  }
 
@@ -5676,7 +5684,7 @@
 	var content = __webpack_require__(193);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(194)(content, {});
+	var update = __webpack_require__(195)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -5696,7 +5704,7 @@
 /* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(202)();
+	exports = module.exports = __webpack_require__(194)();
 	// imports
 
 
@@ -5708,6 +5716,62 @@
 
 /***/ },
 /* 194 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ },
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -5961,7 +6025,7 @@
 
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;!function() {
@@ -15519,237 +15583,7 @@
 	}();
 
 /***/ },
-/* 196 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	// Splits level rows into individual tiles.
-	function createLevelTiles(rows) {
-	  var levelTiles = rows.map(function (row) {
-	    return row.split('');
-	  });
-	  return levelTiles;
-	}
-
-	var levels = [{
-	  maxMoves: 7,
-	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["___", "___", "0_^"])
-	}, {
-	  maxMoves: 7,
-	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["0^_", "___", "0^_"])
-	}, {
-	  maxMoves: 14,
-	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["0^__", "____", "0^_^", "___0"])
-	}, {
-	  maxMoves: 24,
-	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["__^_", "^___", "__^_", "__^_"])
-	}, {
-	  maxMoves: 27,
-	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["^____", "__^__", "^_0__", "_00__", "_____"])
-	}, {
-	  maxMoves: 22,
-	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["0^___^", "____0_", "0^_^__", "___0__"])
-	}, {
-	  maxMoves: 32,
-	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["______", "_^_^__", "_^___0", "___^__", "_0____"])
-	}];
-
-		exports.default = levels;
-
-/***/ },
 /* 197 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.canMoveTo = canMoveTo;
-	exports.levelNumberFromHash = levelNumberFromHash;
-	exports.winConditionsMet = winConditionsMet;
-
-	var _d = __webpack_require__(195);
-
-	var _d2 = _interopRequireDefault(_d);
-
-	var _tileCodes = __webpack_require__(198);
-
-	var tileCodes = _interopRequireWildcard(_tileCodes);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// Determines whether the player is allowed to move to the given coordinates.
-	function canMoveTo(tiles, row, column) {
-	  var outOfBounds = row < 0 || column < 0 || row >= tiles.length || column >= tiles[0].length;
-
-	  if (outOfBounds) {
-	    return false;
-	  }
-
-	  var tile = tiles[row][column];
-	  var canMove = tile === tileCodes.PRESSED || tile === tileCodes.UNPRESSED;
-	  return canMove;
-	}
-
-	// Gets the level number from the URL hash.
-	function levelNumberFromHash() {
-	  var levelNumber = parseInt(location.hash.replace('#', '') || 0);
-	  return levelNumber;
-	}
-
-	// Determines whether the win conditions have been met.
-	function winConditionsMet(tiles) {
-	  var offTilesRemain = tiles
-	  // Flatten.
-	  .reduce(function (tileArray, rowTiles) {
-	    return tileArray.concat(rowTiles);
-	  }, []).some(function (tile) {
-	    return tile === tileCodes.UNPRESSED;
-	  });
-
-	  var conditionsMet = !offTilesRemain;
-	  return conditionsMet;
-		}
-
-/***/ },
-/* 198 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var PRESSED = exports.PRESSED = '0';
-	var UNPRESSED = exports.UNPRESSED = '_';
-	var BROKEN = exports.BROKEN = '^';
-
-/***/ },
-/* 199 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.findDistance = findDistance;
-	exports.playSoundEffect = playSoundEffect;
-	// Determines the distance between two points (i.e. with no diagonal movement).
-	function findDistance(row1, column1, row2, column2) {
-	  var rowDistance = Math.abs(row1 - row2);
-	  var columnDistance = Math.abs(column1 - column2);
-	  var distance = rowDistance + columnDistance;
-	  return distance;
-	}
-
-	// Plays an audio clip from the beginning.
-	function playSoundEffect(audio) {
-	  audio.pause();
-	  audio.currentTime = 0;
-	  audio.play();
-		}
-
-/***/ },
-/* 200 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var LEFT = exports.LEFT = 37;
-	var UP = exports.UP = 38;
-	var RIGHT = exports.RIGHT = 39;
-	var DOWN = exports.DOWN = 40;
-	var R = exports.R = 82;
-
-/***/ },
-/* 201 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var LOST = exports.LOST = 'LOST';
-	var PLAYING = exports.PLAYING = 'PLAYING';
-	var WON = exports.WON = 'WON';
-
-/***/ },
-/* 202 */
-/***/ function(module, exports) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	// css base code, injected by the css-loader
-	module.exports = function() {
-		var list = [];
-
-		// return the list of modules as css string
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-
-		// import a list of modules into the list
-		list.i = function(modules, mediaQuery) {
-			if(typeof modules === "string")
-				modules = [[null, modules, ""]];
-			var alreadyImportedModules = {};
-			for(var i = 0; i < this.length; i++) {
-				var id = this[i][0];
-				if(typeof id === "number")
-					alreadyImportedModules[id] = true;
-			}
-			for(i = 0; i < modules.length; i++) {
-				var item = modules[i];
-				// skip already imported module
-				// this implementation is not 100% perfect for weird media query combinations
-				//  when a module is imported multiple times with different media queries.
-				//  I hope this will never occur (Hey this way we have smaller bundles)
-				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-					if(mediaQuery && !item[2]) {
-						item[2] = mediaQuery;
-					} else if(mediaQuery) {
-						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-					}
-					list.push(item);
-				}
-			}
-		};
-		return list;
-	};
-
-
-/***/ },
-/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;;(function () {
@@ -16594,6 +16428,192 @@
 		}
 	}());
 
+
+/***/ },
+/* 198 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	// Splits level rows into individual tiles.
+	function createLevelTiles(rows) {
+	  var levelTiles = rows.map(function (row) {
+	    return row.split('');
+	  });
+	  return levelTiles;
+	}
+
+	var levels = [{
+	  maxMoves: 7,
+	  player: { row: 2, column: 0 },
+	  tiles: createLevelTiles(["___", "___", "0_^"])
+	}, {
+	  maxMoves: 7,
+	  player: { row: 2, column: 2 },
+	  tiles: createLevelTiles(["0^_", "___", "0^_"])
+	}, {
+	  maxMoves: 13,
+	  player: { row: 2, column: 0 },
+	  tiles: createLevelTiles(["0__", "__^", "___"])
+	}, {
+	  maxMoves: 15,
+	  player: { row: 1, column: 3 },
+	  tiles: createLevelTiles(["_0_0", "^_^_", "__^_", "____"])
+	}, {
+	  maxMoves: 14,
+	  player: { row: 2, column: 0 },
+	  tiles: createLevelTiles(["0^__", "____", "0^_^", "___0"])
+	}, {
+	  maxMoves: 20,
+	  player: { row: 2, column: 1 },
+	  tiles: createLevelTiles(["__^_", "^___", "__^_", "__^_"])
+	}, {
+	  maxMoves: 21,
+	  player: { row: 2, column: 3 },
+	  tiles: createLevelTiles(["_____", "^0_0_", "_0_0_", "_0^0_", "_____"])
+	}, {
+	  maxMoves: 27,
+	  player: { row: 2, column: 0 },
+	  tiles: createLevelTiles(["^____", "__^__", "^_0__", "_00__", "_____"])
+	}, {
+	  maxMoves: 27,
+	  player: { row: 2, column: 1 },
+	  tiles: createLevelTiles(["_____", "^_^__", "^___0", "__^__", "0____"])
+	}, {
+	  maxMoves: 34,
+	  player: { row: 2, column: 0 },
+	  tiles: createLevelTiles(["0^___^", "0^___^", "____0_", "0^_^__", "___0__", "___0__"])
+	}];
+
+		exports.default = levels;
+
+/***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.canMoveTo = canMoveTo;
+	exports.levelNumberFromHash = levelNumberFromHash;
+	exports.winConditionsMet = winConditionsMet;
+
+	var _d = __webpack_require__(196);
+
+	var _d2 = _interopRequireDefault(_d);
+
+	var _tileCodes = __webpack_require__(200);
+
+	var tileCodes = _interopRequireWildcard(_tileCodes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// Determines whether the player is allowed to move to the given coordinates.
+	function canMoveTo(tiles, row, column) {
+	  var outOfBounds = row < 0 || column < 0 || row >= tiles.length || column >= tiles[0].length;
+
+	  if (outOfBounds) {
+	    return false;
+	  }
+
+	  var tile = tiles[row][column];
+	  var canMove = tile === tileCodes.PRESSED || tile === tileCodes.UNPRESSED;
+	  return canMove;
+	}
+
+	// Gets the level number from the URL hash.
+	function levelNumberFromHash() {
+	  var levelNumber = parseInt(location.hash.replace('#', '') || 0);
+	  return levelNumber;
+	}
+
+	// Determines whether the win conditions have been met.
+	function winConditionsMet(tiles) {
+	  var offTilesRemain = tiles
+	  // Flatten.
+	  .reduce(function (tileArray, rowTiles) {
+	    return tileArray.concat(rowTiles);
+	  }, []).some(function (tile) {
+	    return tile === tileCodes.UNPRESSED;
+	  });
+
+	  var conditionsMet = !offTilesRemain;
+	  return conditionsMet;
+		}
+
+/***/ },
+/* 200 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var PRESSED = exports.PRESSED = '0';
+	var UNPRESSED = exports.UNPRESSED = '_';
+	var BROKEN = exports.BROKEN = '^';
+
+/***/ },
+/* 201 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.findDistance = findDistance;
+	exports.playSoundEffect = playSoundEffect;
+	// Determines the distance between two points (i.e. with no diagonal movement).
+	function findDistance(row1, column1, row2, column2) {
+	  var rowDistance = Math.abs(row1 - row2);
+	  var columnDistance = Math.abs(column1 - column2);
+	  var distance = rowDistance + columnDistance;
+	  return distance;
+	}
+
+	// Plays an audio clip from the beginning.
+	function playSoundEffect(audio) {
+	  audio.pause();
+	  audio.currentTime = 0;
+	  audio.play();
+		}
+
+/***/ },
+/* 202 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var LEFT = exports.LEFT = 37;
+	var UP = exports.UP = 38;
+	var RIGHT = exports.RIGHT = 39;
+	var DOWN = exports.DOWN = 40;
+	var R = exports.R = 82;
+
+/***/ },
+/* 203 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var LOST = exports.LOST = 'LOST';
+	var PLAYING = exports.PLAYING = 'PLAYING';
+	var WON = exports.WON = 'WON';
 
 /***/ }
 /******/ ]);
