@@ -5321,27 +5321,27 @@
 
 	__webpack_require__(192);
 
-	var _d = __webpack_require__(196);
+	var _d = __webpack_require__(195);
 
 	var _d2 = _interopRequireDefault(_d);
 
-	var _levels = __webpack_require__(197);
+	var _levels = __webpack_require__(196);
 
 	var _levels2 = _interopRequireDefault(_levels);
 
-	var _levelManager = __webpack_require__(198);
+	var _levelManager = __webpack_require__(197);
 
-	var _util = __webpack_require__(200);
+	var _util = __webpack_require__(199);
 
-	var _keyCodes = __webpack_require__(201);
+	var _keyCodes = __webpack_require__(200);
 
 	var keyCodes = _interopRequireWildcard(_keyCodes);
 
-	var _tileCodes = __webpack_require__(199);
+	var _tileCodes = __webpack_require__(198);
 
 	var tileCodes = _interopRequireWildcard(_tileCodes);
 
-	var _gameStatuses = __webpack_require__(202);
+	var _gameStatuses = __webpack_require__(201);
 
 	var gameStatuses = _interopRequireWildcard(_gameStatuses);
 
@@ -5437,18 +5437,18 @@
 	  update();
 	}
 
-	// Switches ON tile to OFF; OFF tile to ON.
+	// Switches ON tile to UNPRESSED; UNPRESSED tile to PRESSED.
 	function toggleTile(row, column) {
 	  var tile = tiles[row][column];
-	  console.assert(tile === tileCodes.ON || tile === tileCodes.OFF);
+	  console.assert(tile === tileCodes.PRESSED || tile === tileCodes.UNPRESSED);
 
 	  switch (tile) {
-	    case tileCodes.ON:
-	      tiles[row][column] = tileCodes.OFF;
+	    case tileCodes.PRESSED:
+	      tiles[row][column] = tileCodes.UNPRESSED;
 	      break;
 
-	    case tileCodes.OFF:
-	      tiles[row][column] = tileCodes.ON;
+	    case tileCodes.UNPRESSED:
+	      tiles[row][column] = tileCodes.PRESSED;
 	      break;
 	  }
 	}
@@ -5495,11 +5495,11 @@
 
 	  // Enter + Update
 	  selection.classed({
-	    'on': function on(d) {
-	      return d.tile === tileCodes.ON;
+	    'pressed': function pressed(d) {
+	      return d.tile === tileCodes.PRESSED;
 	    },
-	    'off': function off(d) {
-	      return d.tile === tileCodes.OFF;
+	    'unpressed': function unpressed(d) {
+	      return d.tile === tileCodes.UNPRESSED;
 	    },
 	    'broken': function broken(d) {
 	      return d.tile === tileCodes.BROKEN;
@@ -5580,7 +5580,7 @@
 	  // Enter
 	  selection.enter().append('div').attr('class', 'counter')
 	  // Transition from 0px because a bug causes strange behaviour from 0rem.
-	  .style('width', '0px').transition().duration(200).style('width', '1rem');
+	  .style('width', '0px').transition().duration(200).style('width', '2rem');
 
 	  // Enter + Update
 	  selection.attr('title', 'Move ' + moveCount + ' of ' + maxMoves).classed('used', function (d) {
@@ -5671,7 +5671,7 @@
 	var content = __webpack_require__(193);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(195)(content, {});
+	var update = __webpack_require__(194)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -5691,74 +5691,18 @@
 /* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(194)();
+	exports = module.exports = __webpack_require__(202)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ":root {\n\n  /* Colors */\n}\n\n@-webkit-keyframes player-bob {\n  50% { -webkit-transform: translateZ(13rem); transform: translateZ(13rem); }\n}\n\n@keyframes player-bob {\n  50% { -webkit-transform: translateZ(13rem); transform: translateZ(13rem); }\n}\n\n@-webkit-keyframes off-breathe {\n  50% { -webkit-transform: translateZ(8rem) scale(0.95); transform: translateZ(8rem) scale(0.95); }\n}\n\n@keyframes off-breathe {\n  50% { -webkit-transform: translateZ(8rem) scale(0.95); transform: translateZ(8rem) scale(0.95); }\n}\n\n*,\n*:before,\n*:after {\n  box-sizing: border-box;\n  outline: none;\n}\n\nhtml, body {\n  height: 100%;\n  margin: 0;\n  padding: 0;\n  width: 100%;\n}\n\nhtml {\n  /* Sets up font size so that 1rem = 10px. */\n  font-size: 62.5%;\n}\n\nbody {\n  background-color: #ecf0f1;\n  background-image: -webkit-radial-gradient(circle, white, #ecf0f1);\n  background-image: radial-gradient(circle, white, #ecf0f1);\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-direction: column;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  font-family: sans-serif;\n  overflow: hidden;\n  padding: 10px;\n  padding: 1rem;\n  -webkit-transition: opacity 1s, -webkit-filter 0.5s;\n  transition: opacity 1s, -webkit-filter 0.5s;\n  transition: filter 0.5s, opacity 1s;\n  transition: filter 0.5s, opacity 1s, -webkit-filter 0.5s\n\n  /* Fade in when game starts. */\n}\n\nbody.lost { filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns=\"http://www.w3.org/2000/svg\"><filter id=\"filter\"><feGaussianBlur stdDeviation=\"3\" /><feColorMatrix type=\"matrix\" color-interpolation-filters=\"sRGB\" values=\"0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0 0 0 1 0\" /></filter></svg>#filter'); -webkit-filter: blur(3px) grayscale(100%); filter: blur(3px) grayscale(100%);\n}\n\nbody.won { filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns=\"http://www.w3.org/2000/svg\"><filter id=\"filter\"><feGaussianBlur stdDeviation=\"3\" /></filter></svg>#filter'); -webkit-filter: blur(3px); filter: blur(3px);\n}\n\nbody.lost,\n  body.playing,\n  body.won { opacity: 1;\n}\n\nbutton {\n  cursor: pointer;\n}\n\nheader {\n  border-radius: 0.5rem;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  margin: 0 auto;\n  overflow: hidden;\n}\n\nmain {\n  margin: auto;\n  position: relative;\n  -webkit-transform: rotateX(45deg) rotateZ(45deg);\n          transform: rotateX(45deg) rotateZ(45deg);\n  -webkit-transform-style: preserve-3d;\n          transform-style: preserve-3d;\n  -webkit-transition: all 0.2s;\n  transition: all 0.2s;\n}\n\nnav {\n  margin-bottom: 10px;\n  margin-bottom: 1rem;\n  text-align: center;\n}\n\nfooter {\n  text-align: center;\n}\n\n.cell,\n.cell:after,\n.cell:before {\n  /* Helps hide the seams between the planes. */\n  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);\n  content: '';\n  height: 90px;\n  height: 9rem;\n  position: absolute;\n  -webkit-transition: all 0.1s;\n  transition: all 0.1s;\n  width: 90px;\n  width: 9rem;\n}\n\n.cell {\n  margin: 10px;\n  margin: 1rem;\n  -webkit-transform: translateZ(5rem);\n          transform: translateZ(5rem);\n  -webkit-transform-style: preserve-3d;\n          transform-style: preserve-3d\n\n  /* Left */\n\n  /* Right */\n}\n\n.cell.broken { background-color: #34495e\n}\n\n.cell.broken:before { background-color: rgb(45, 63, 81);\n}\n\n.cell.broken:after { background-color: rgb(48, 68, 87);\n}\n\n.cell.off { -webkit-animation: off-breathe 2s ease-in-out infinite; animation: off-breathe 2s ease-in-out infinite; background-color: #e74c3c; -webkit-transform: translateZ(8rem); transform: translateZ(8rem)\n}\n\n.cell.off:before { background-color: rgb(199, 65, 52);\n}\n\n.cell.off:after { background-color: rgb(215, 71, 56);\n}\n\n.cell.on { background-color: #2ecc71\n}\n\n.cell.on:before { background-color: rgb(40, 175, 97);\n}\n\n.cell.on:after { background-color: rgb(43, 190, 105);\n}\n\n.cell:before { -webkit-transform: rotateY(90deg) translateX(9rem); transform: rotateY(90deg) translateX(9rem); -webkit-transform-origin: 100% 0; transform-origin: 100% 0;\n}\n\n.cell:after { -webkit-transform: rotateX(-90deg) translateY(9rem); transform: rotateX(-90deg) translateY(9rem); -webkit-transform-origin: 100% 100%; transform-origin: 100% 100%;\n}\n\n.counter {\n  background-color: #2ecc71;\n  height: 10px;\n  height: 1rem;\n  -webkit-transition: background-color 0.2s;\n  transition: background-color 0.2s;\n  width: 10px;\n  width: 1rem\n}\n\n.counter.used { background-color: #34495e;\n}\n\n.level-button {\n  border-radius: 50%;\n  border-width: 0;\n  height: 10px;\n  height: 1rem;\n  padding: 0;\n  margin: 0 2px;\n  margin: 0 0.2rem;\n  -webkit-transition: all 0.2s;\n  transition: all 0.2s;\n  width: 10px;\n  width: 1rem;\n\n  /* Hide text. */\n  text-indent: 100%;\n  overflow: hidden;\n  white-space: nowrap\n}\n\n.level-button.current { background-color: #34495e; cursor: default;\n}\n\n.level-button.complete { background-color: #2ecc71;\n}\n\n.player,\n.player:after,\n.player:before {\n  /* Helps hide the seams between the planes. */\n  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);\n  content: '';\n  height: 40px;\n  height: 4rem;\n  position: absolute;\n  -webkit-transition: all 0.1s;\n  transition: all 0.1s;\n  width: 40px;\n  width: 4rem;\n}\n\n.player {\n  -webkit-animation: player-bob 2s ease-in-out infinite;\n          animation: player-bob 2s ease-in-out infinite;\n  background-color: #3498db;\n  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 0%, 0.1);\n  margin: 35px;\n  margin: 3.5rem;\n  pointer-events: none;\n  -webkit-transform-style: preserve-3d;\n          transform-style: preserve-3d;\n  -webkit-transform: translateZ(15rem);\n          transform: translateZ(15rem);\n  -webkit-transition: all 0.2s;\n  transition: all 0.2s\n\n  /* Left */\n\n  /* Right */\n}\n\n.player:before { background-color: rgb(45, 131, 188); -webkit-transform: rotateY(90deg) translateX(4rem); transform: rotateY(90deg) translateX(4rem); -webkit-transform-origin: 100% 0; transform-origin: 100% 0;\n}\n\n.player:after { background-color: rgb(48, 141, 204); -webkit-transform: rotateX(-90deg) translateY(4rem); transform: rotateX(-90deg) translateY(4rem); -webkit-transform-origin: 100% 100%; transform-origin: 100% 100%;\n}\n\n.reset-button {\n  background-color: transparent;\n  border-width: 0;\n  padding: 10px;\n  padding: 1rem;\n}\n", ""]);
+	exports.push([module.id, ":root {\n\n  /* Colors */\n\n  /* Sizes */\n}\n\n@-webkit-keyframes player-bob {\n  50% { -webkit-transform: translateZ(13rem); transform: translateZ(13rem); }\n}\n\n@keyframes player-bob {\n  50% { -webkit-transform: translateZ(13rem); transform: translateZ(13rem); }\n}\n\n@-webkit-keyframes unpressed-breathe {\n  50% { -webkit-transform: translateZ(8rem) scale(0.95); transform: translateZ(8rem) scale(0.95); }\n}\n\n@keyframes unpressed-breathe {\n  50% { -webkit-transform: translateZ(8rem) scale(0.95); transform: translateZ(8rem) scale(0.95); }\n}\n\n*,\n*:before,\n*:after {\n  box-sizing: border-box;\n  outline: none;\n}\n\nhtml, body {\n  height: 100%;\n  margin: 0;\n  padding: 0;\n  width: 100%;\n}\n\nhtml {\n  /* Sets up font size so that 1rem = 10px. */\n  font-size: 62.5%;\n}\n\nbody {\n  background-color: #433C38;\n  background-image: -webkit-radial-gradient(circle, #433C38, black);\n  background-image: radial-gradient(circle, #433C38, black);\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-direction: column;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  font-family: sans-serif;\n  overflow: hidden;\n  padding: 40px;\n  padding: 4rem;\n  -webkit-transition: opacity 1s, -webkit-filter 0.5s;\n  transition: opacity 1s, -webkit-filter 0.5s;\n  transition: filter 0.5s, opacity 1s;\n  transition: filter 0.5s, opacity 1s, -webkit-filter 0.5s\n\n  /* Fade in when game starts. */\n}\n\nbody.lost { filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns=\"http://www.w3.org/2000/svg\"><filter id=\"filter\"><feGaussianBlur stdDeviation=\"3\" /><feColorMatrix type=\"matrix\" color-interpolation-filters=\"sRGB\" values=\"0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0 0 0 1 0\" /></filter></svg>#filter'); -webkit-filter: blur(3px) grayscale(100%); filter: blur(3px) grayscale(100%);\n}\n\nbody.won { filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns=\"http://www.w3.org/2000/svg\"><filter id=\"filter\"><feGaussianBlur stdDeviation=\"3\" /></filter></svg>#filter'); -webkit-filter: blur(3px); filter: blur(3px);\n}\n\nbody.lost,\n  body.playing,\n  body.won { opacity: 1;\n}\n\nbutton {\n  cursor: pointer;\n}\n\nheader {\n  border: 2px solid white;\n  border-radius: 2rem;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  margin: 0 auto;\n  opacity: 0.95;\n  overflow: hidden;\n}\n\nmain {\n  margin: auto;\n  position: relative;\n  -webkit-transform: rotateX(45deg) rotateZ(45deg);\n          transform: rotateX(45deg) rotateZ(45deg);\n  -webkit-transform-style: preserve-3d;\n          transform-style: preserve-3d;\n  -webkit-transition: all 0.2s;\n  transition: all 0.2s;\n}\n\nnav {\n  margin-bottom: 40px;\n  margin-bottom: 4rem;\n  text-align: center;\n}\n\nfooter {\n  text-align: center;\n}\n\n.cell,\n.cell:after,\n.cell:before {\n  /* Helps hide the seams between the planes. */\n  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 100%, 1);\n  content: '';\n  height: 90px;\n  height: 9rem;\n  opacity: 0.95;\n  position: absolute;\n  -webkit-transition: all 0.1s;\n  transition: all 0.1s;\n  width: 90px;\n  width: 9rem;\n}\n\n.cell {\n  margin: 10px;\n  margin: 1rem;\n  -webkit-transform: translateZ(5rem);\n          transform: translateZ(5rem);\n  -webkit-transform-style: preserve-3d;\n          transform-style: preserve-3d\n\n  /* Left */\n\n  /* Right */\n}\n\n.cell.broken { background-color: #CCB6A0\n}\n\n.cell.broken:before { background-color: rgb(211, 192, 173);\n}\n\n.cell.broken:after { background-color: rgb(208, 187, 167);\n}\n\n.cell.unpressed { -webkit-animation: unpressed-breathe 2s ease-in-out infinite; animation: unpressed-breathe 2s ease-in-out infinite; background-color: #D32D8F; -webkit-transform: translateZ(8rem); transform: translateZ(8rem)\n}\n\n.cell.unpressed:before { background-color: rgb(217, 74, 159);\n}\n\n.cell.unpressed:after { background-color: rgb(214, 60, 151);\n}\n\n.cell.pressed { background-color: #00B3C5\n}\n\n.cell.pressed:before { background-color: rgb(36, 190, 205);\n}\n\n.cell.pressed:after { background-color: rgb(18, 184, 201);\n}\n\n.cell:before { -webkit-transform: rotateY(90deg) translateX(9rem); transform: rotateY(90deg) translateX(9rem); -webkit-transform-origin: 100% 0; transform-origin: 100% 0;\n}\n\n.cell:after { -webkit-transform: rotateX(-90deg) translateY(9rem); transform: rotateX(-90deg) translateY(9rem); -webkit-transform-origin: 100% 100%; transform-origin: 100% 100%;\n}\n\n.counter {\n  background-color: #00B3C5;\n  height: 20px;\n  height: 2rem;\n  -webkit-transition: background-color 0.2s;\n  transition: background-color 0.2s;\n  width: 20px;\n  width: 2rem\n}\n\n.counter.used { background-color: #D32D8F;\n}\n\n.level-button {\n  background-color: #CCB6A0;\n  border: 2px solid white;\n  border-radius: 50%;\n  cursor: default;\n  height: 20px;\n  height: 2rem;\n  opacity: 0.95;\n  padding: 0;\n  margin: 0 5px;\n  margin: 0 0.5rem;\n  -webkit-transition: all 0.2s;\n  transition: all 0.2s;\n  width: 20px;\n  width: 2rem;\n\n  /* Hide text. */\n  text-indent: 100%;\n  overflow: hidden;\n  white-space: nowrap\n}\n\n.level-button.current { background-color: #D32D8F;\n}\n\n.level-button.complete { background-color: #00B3C5; cursor: pointer\n}\n\n.level-button.complete:hover { -webkit-transform: scale(1.2); transform: scale(1.2);\n}\n\n.player,\n.player:after,\n.player:before {\n  /* Helps hide the seams between the planes. */\n  box-shadow: inset 0 0 0 0.2rem hsla(0, 0%, 100%, 1);\n  content: '';\n  height: 40px;\n  height: 4rem;\n  opacity: 0.95;\n  position: absolute;\n  -webkit-transition: all 0.1s;\n  transition: all 0.1s;\n  width: 40px;\n  width: 4rem;\n}\n\n.player {\n  -webkit-animation: player-bob 2s ease-in-out infinite;\n          animation: player-bob 2s ease-in-out infinite;\n  background-color: #6EBD4B;\n  margin: 35px;\n  margin: 3.5rem;\n  pointer-events: none;\n  -webkit-transform-style: preserve-3d;\n          transform-style: preserve-3d;\n  -webkit-transform: translateZ(15rem);\n          transform: translateZ(15rem);\n  -webkit-transition: all 0.2s;\n  transition: all 0.2s\n\n  /* Left */\n\n  /* Right */\n}\n\n.player:before { background-color: rgb(95, 163, 65); -webkit-transform: rotateY(90deg) translateX(4rem); transform: rotateY(90deg) translateX(4rem); -webkit-transform-origin: 100% 0; transform-origin: 100% 0;\n}\n\n.player:after { background-color: rgb(102, 176, 70); -webkit-transform: rotateX(-90deg) translateY(4rem); transform: rotateX(-90deg) translateY(4rem); -webkit-transform-origin: 100% 100%; transform-origin: 100% 100%;\n}\n\n.reset-button {\n  background-color: transparent;\n  border-width: 0;\n  opacity: 0.95;\n  padding: 10px;\n  padding: 1rem;\n  -webkit-transform: scale(2);\n          transform: scale(2);\n  -webkit-transition: -webkit-transform 0.2s;\n  transition: -webkit-transform 0.2s;\n  transition: transform 0.2s;\n  transition: transform 0.2s, -webkit-transform 0.2s\n}\n\n.reset-button:hover { -webkit-transform: scale(2.4); transform: scale(2.4);\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
 /* 194 */
-/***/ function(module, exports) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	// css base code, injected by the css-loader
-	module.exports = function() {
-		var list = [];
-
-		// return the list of modules as css string
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-
-		// import a list of modules into the list
-		list.i = function(modules, mediaQuery) {
-			if(typeof modules === "string")
-				modules = [[null, modules, ""]];
-			var alreadyImportedModules = {};
-			for(var i = 0; i < this.length; i++) {
-				var id = this[i][0];
-				if(typeof id === "number")
-					alreadyImportedModules[id] = true;
-			}
-			for(i = 0; i < modules.length; i++) {
-				var item = modules[i];
-				// skip already imported module
-				// this implementation is not 100% perfect for weird media query combinations
-				//  when a module is imported multiple times with different media queries.
-				//  I hope this will never occur (Hey this way we have smaller bundles)
-				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-					if(mediaQuery && !item[2]) {
-						item[2] = mediaQuery;
-					} else if(mediaQuery) {
-						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-					}
-					list.push(item);
-				}
-			}
-		};
-		return list;
-	};
-
-
-/***/ },
-/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6012,7 +5956,7 @@
 
 
 /***/ },
-/* 196 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;!function() {
@@ -15570,7 +15514,7 @@
 	}();
 
 /***/ },
-/* 197 */
+/* 196 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -15619,7 +15563,7 @@
 		exports.default = levels;
 
 /***/ },
-/* 198 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15631,11 +15575,11 @@
 	exports.levelNumberFromHash = levelNumberFromHash;
 	exports.winConditionsMet = winConditionsMet;
 
-	var _d = __webpack_require__(196);
+	var _d = __webpack_require__(195);
 
 	var _d2 = _interopRequireDefault(_d);
 
-	var _tileCodes = __webpack_require__(199);
+	var _tileCodes = __webpack_require__(198);
 
 	var tileCodes = _interopRequireWildcard(_tileCodes);
 
@@ -15652,7 +15596,7 @@
 	  }
 
 	  var tile = tiles[row][column];
-	  var canMove = tile === tileCodes.ON || tile === tileCodes.OFF;
+	  var canMove = tile === tileCodes.PRESSED || tile === tileCodes.UNPRESSED;
 	  return canMove;
 	}
 
@@ -15669,7 +15613,7 @@
 	  .reduce(function (tileArray, rowTiles) {
 	    return tileArray.concat(rowTiles);
 	  }, []).some(function (tile) {
-	    return tile === tileCodes.OFF;
+	    return tile === tileCodes.UNPRESSED;
 	  });
 
 	  var conditionsMet = !offTilesRemain;
@@ -15677,7 +15621,7 @@
 		}
 
 /***/ },
-/* 199 */
+/* 198 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15685,12 +15629,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var ON = exports.ON = '0';
-	var OFF = exports.OFF = '_';
+	var PRESSED = exports.PRESSED = '0';
+	var UNPRESSED = exports.UNPRESSED = '_';
 	var BROKEN = exports.BROKEN = '^';
 
 /***/ },
-/* 200 */
+/* 199 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -15716,7 +15660,7 @@
 		}
 
 /***/ },
-/* 201 */
+/* 200 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -15731,7 +15675,7 @@
 	var R = exports.R = 82;
 
 /***/ },
-/* 202 */
+/* 201 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15742,6 +15686,62 @@
 	var LOST = exports.LOST = 'LOST';
 	var PLAYING = exports.PLAYING = 'PLAYING';
 	var WON = exports.WON = 'WON';
+
+/***/ },
+/* 202 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
 
 /***/ }
 /******/ ]);
