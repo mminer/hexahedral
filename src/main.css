@@ -44,6 +44,23 @@ body {
   font-family: sans-serif;
   overflow: hidden;
   padding: 1rem;
+  transition-duration: 0.5s, 1s;
+  transition-property: filter, opacity;
+
+  /* Fade in when game starts. */
+  &.lost,
+  &.playing,
+  &.won {
+    opacity: 1;
+  }
+
+  &.won {
+    filter: blur(3px);
+  }
+
+  &.lost {
+    filter: blur(3px) grayscale(100%);
+  }
 }
 
 button {

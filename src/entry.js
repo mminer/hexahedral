@@ -9,12 +9,16 @@ import {
 import { findDistance, playSoundEffect } from 'util';
 import * as keyCodes from 'key-codes';
 import * as tileCodes from 'tile-codes';
+import * as gameStatuses from 'game-statuses';
+
+const LOAD_NEXT_LEVEL_DELAY = 2000;
 
 // Width and height of level squares.
 const CELL_SIZE = 10;
 const CELL_SPACING = 1;
 const CELL_WIDTH = CELL_SIZE - CELL_SPACING;
 
+let gameStatus = gameStatuses.PLAYING;
 let keysCurrentlyPressed = new Set();
 let maxMoves = Infinity;
 let moveCount = 0;
@@ -47,6 +51,10 @@ const keyHandlers = {
 
 // Responds to keydown events.
 function handleKeyDown (event) {
+  if (gameStatus !== gameStatuses.PLAYING) {
+    return;
+  }
+
   let keyCode = event.keyCode;
 
   // Prevent keys from repeating.
@@ -120,36 +128,29 @@ function toggleTile (row, column) {
 
 // Redraws the level and player.
 function update () {
+  if (winConditionsMet(tiles)) {
+    gameStatus = gameStatuses.WON;
+    loadNextLevelAfterDelay();
+  } else if (moveCount >= maxMoves) {
+    gameStatus = gameStatuses.LOST;
+    resetAfterDelay();
+  }
+
   let rowCount = tiles.length;
   let columnCount = tiles[0].length;
 
-  d3.select('main').style({
-    height: `${rowCount * CELL_SIZE}rem`,
-    width: `${columnCount * CELL_SIZE}rem`,
-  });
+  d3.select('body').attr('class', gameStatus.toLowerCase());
+
+  d3.select('main')
+    .style({
+      height: `${rowCount * CELL_SIZE}rem`,
+      width: `${columnCount * CELL_SIZE}rem`,
+    });
 
   updateLevel();
   updateLevelNavigator();
   updateMoveCounter();
   updatePlayer();
-
-  if (winConditionsMet(tiles)) {
-    let message = `You won in ${moveCount} moves. Play again?`;
-
-    if (confirm(message)) {
-      reset();
-    }
-  }
-
-  let maxMovesMet = moveCount >= maxMoves;
-
-  if (maxMovesMet) {
-    let message = 'Maximum moves exceeded! Play again?';
-
-    if (confirm(message)) {
-      reset();
-    }
-  }
 }
 
 // Redraws the level.
@@ -269,7 +270,7 @@ function loadLevel (levelNumber) {
   let levelExists = levelNumber in levels;
 
   if (!levelExists) {
-    alert(`There is no level ${levelNumber}.`);
+    console.warn(`There is no level ${levelNumber}.`);
     return;
   }
 
@@ -277,17 +278,33 @@ function loadLevel (levelNumber) {
   reset();
 }
 
+// Loads the next level after a pause.
+function loadNextLevelAfterDelay () {
+  setTimeout(() => {
+    let currentLevelNumber = levelNumberFromHash();
+    let nextLevelNumber = currentLevelNumber + 1;
+    loadLevel(nextLevelNumber);
+  }, LOAD_NEXT_LEVEL_DELAY);
+}
+
+// Reloads the current level after a pause.
+function resetAfterDelay () {
+  setTimeout(reset, LOAD_NEXT_LEVEL_DELAY);
+}
+
 // Loads the level.
 function reset () {
   let levelNumber = levelNumberFromHash();
   let level = levels[levelNumber];
 
+  gameStatus = gameStatuses.PLAYING;
+  moveCount = 0;
+  maxMoves = level.maxMoves;
+  player = Object.assign({}, level.player);
+
   // Make copy of level tiles.
   tiles = level.tiles.map(rowTiles => rowTiles.slice());
 
-  player = Object.assign({}, level.player);
-  maxMoves = level.maxMoves;
-  moveCount = 0;
   update();
 }
 
