@@ -5627,6 +5627,7 @@
 
 	  if (!levelExists) {
 	    console.warn('There is no level ' + levelNumber + '.');
+	    loadLevel(0);
 	    return;
 	  }
 
