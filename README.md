@@ -26,3 +26,9 @@ After cloning the repository, run the following.
     npm start
 
 Then open *build/index.html* in your browser.
+
+
+## Credit
+
+Sound effects from Game Burp's
+[free game sound effects pack](http://www.gameburp.com/free-game-sound-fx/).
