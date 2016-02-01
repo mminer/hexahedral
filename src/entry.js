@@ -128,18 +128,12 @@ function toggleTile (row, column) {
 
 // Redraws the level and player.
 function update () {
-  if (winConditionsMet(tiles)) {
-    gameStatus = gameStatuses.WON;
-    playSoundEffect(winAudio);
-    loadNextLevelAfterDelay();
+  let maxMovesMet = moveCount >= maxMoves;
 
-    if (devMode) {
-      console.info(`Completed in ${moveCount} moves.`);
-    }
-  } else if (moveCount >= maxMoves) {
-    gameStatus = gameStatuses.LOST;
-    playSoundEffect(loseAudio);
-    resetAfterDelay();
+  if (winConditionsMet(tiles)) {
+    win();
+  } else if (maxMovesMet) {
+    lose();
   }
 
   let rowCount = tiles.length;
@@ -236,7 +230,7 @@ function updateLevelNavigator () {
 
 // Redraws the move counter.
 function updateMoveCounter () {
-  let data = d3.range(maxMoves).map(move => ({ used: moveCount > move }));
+  let data = d3.range(maxMoves).map(aMove => ({ used: moveCount > aMove }));
   let selection = d3.select('#move-counter').selectAll('.counter').data(data);
 
   // Enter
@@ -246,7 +240,7 @@ function updateMoveCounter () {
       .style('width', '0px')
     .transition()
       .duration(200)
-      .style('width', '2rem')
+      .style('width', '2rem');
 
   // Enter + Update
   selection
@@ -261,7 +255,7 @@ function updateMoveCounter () {
 }
 
 // Redraws the player.
-function updatePlayer (container) {
+function updatePlayer () {
   let selection = d3.select('main').selectAll('.player').data([player]);
 
   // Enter
@@ -316,6 +310,24 @@ function reset () {
   tiles = level.tiles.map(rowTiles => rowTiles.slice());
 
   update();
+}
+
+// Congratulates the player then move onto the next level.
+function win () {
+  gameStatus = gameStatuses.WON;
+  playSoundEffect(winAudio);
+  loadNextLevelAfterDelay();
+
+  if (devMode) {
+    console.info(`Completed in ${moveCount} moves.`);
+  }
+}
+
+// Admonishes the player then restarts the current level.
+function lose () {
+  gameStatus = gameStatuses.LOST;
+  playSoundEffect(loseAudio);
+  resetAfterDelay();
 }
 
 // Initialization:
