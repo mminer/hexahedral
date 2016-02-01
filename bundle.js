@@ -5461,18 +5461,12 @@
 
 	// Redraws the level and player.
 	function update() {
-	  if ((0, _levelManager.winConditionsMet)(tiles)) {
-	    gameStatus = gameStatuses.WON;
-	    (0, _util.playSoundEffect)(winAudio);
-	    loadNextLevelAfterDelay();
+	  var maxMovesMet = moveCount >= maxMoves;
 
-	    if (devMode) {
-	      console.info('Completed in ' + moveCount + ' moves.');
-	    }
-	  } else if (moveCount >= maxMoves) {
-	    gameStatus = gameStatuses.LOST;
-	    (0, _util.playSoundEffect)(loseAudio);
-	    resetAfterDelay();
+	  if ((0, _levelManager.winConditionsMet)(tiles)) {
+	    win();
+	  } else if (maxMovesMet) {
+	    lose();
 	  }
 
 	  var rowCount = tiles.length;
@@ -5584,8 +5578,8 @@
 
 	// Redraws the move counter.
 	function updateMoveCounter() {
-	  var data = _d2.default.range(maxMoves).map(function (move) {
-	    return { used: moveCount > move };
+	  var data = _d2.default.range(maxMoves).map(function (aMove) {
+	    return { used: moveCount > aMove };
 	  });
 	  var selection = _d2.default.select('#move-counter').selectAll('.counter').data(data);
 
@@ -5604,7 +5598,7 @@
 	}
 
 	// Redraws the player.
-	function updatePlayer(container) {
+	function updatePlayer() {
 	  var selection = _d2.default.select('main').selectAll('.player').data([player]);
 
 	  // Enter
@@ -5665,6 +5659,24 @@
 	  });
 
 	  update();
+	}
+
+	// Congratulates the player then move onto the next level.
+	function win() {
+	  gameStatus = gameStatuses.WON;
+	  (0, _util.playSoundEffect)(winAudio);
+	  loadNextLevelAfterDelay();
+
+	  if (devMode) {
+	    console.info('Completed in ' + moveCount + ' moves.');
+	  }
+	}
+
+	// Admonishes the player then restarts the current level.
+	function lose() {
+	  gameStatus = gameStatuses.LOST;
+	  (0, _util.playSoundEffect)(loseAudio);
+	  resetAfterDelay();
 	}
 
 	// Initialization:
@@ -16434,7 +16446,7 @@
 /* 198 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -16450,43 +16462,43 @@
 	var levels = [{
 	  maxMoves: 7,
 	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["___", "___", "0_^"])
+	  tiles: createLevelTiles(['___', '___', '0_^'])
 	}, {
 	  maxMoves: 7,
 	  player: { row: 2, column: 2 },
-	  tiles: createLevelTiles(["0^_", "___", "0^_"])
+	  tiles: createLevelTiles(['0^_', '___', '0^_'])
 	}, {
 	  maxMoves: 13,
 	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["0__", "__^", "___"])
+	  tiles: createLevelTiles(['0__', '__^', '___'])
 	}, {
 	  maxMoves: 15,
 	  player: { row: 1, column: 3 },
-	  tiles: createLevelTiles(["_0_0", "^_^_", "__^_", "____"])
+	  tiles: createLevelTiles(['_0_0', '^_^_', '__^_', '____'])
 	}, {
 	  maxMoves: 14,
 	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["0^__", "____", "0^_^", "___0"])
+	  tiles: createLevelTiles(['0^__', '____', '0^_^', '___0'])
 	}, {
 	  maxMoves: 20,
 	  player: { row: 2, column: 1 },
-	  tiles: createLevelTiles(["__^_", "^___", "__^_", "__^_"])
+	  tiles: createLevelTiles(['__^_', '^___', '__^_', '__^_'])
 	}, {
 	  maxMoves: 21,
 	  player: { row: 2, column: 3 },
-	  tiles: createLevelTiles(["_____", "^0_0_", "_0_0_", "_0^0_", "_____"])
+	  tiles: createLevelTiles(['_____', '^0_0_', '_0_0_', '_0^0_', '_____'])
 	}, {
 	  maxMoves: 27,
 	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["^____", "__^__", "^_0__", "_00__", "_____"])
+	  tiles: createLevelTiles(['^____', '__^__', '^_0__', '_00__', '_____'])
 	}, {
 	  maxMoves: 27,
 	  player: { row: 2, column: 1 },
-	  tiles: createLevelTiles(["_____", "^_^__", "^___0", "__^__", "0____"])
+	  tiles: createLevelTiles(['_____', '^_^__', '^___0', '__^__', '0____'])
 	}, {
-	  maxMoves: 34,
+	  maxMoves: 30,
 	  player: { row: 2, column: 0 },
-	  tiles: createLevelTiles(["0^___^", "0^___^", "____0_", "0^_^__", "___0__", "___0__"])
+	  tiles: createLevelTiles(['0^___^', '0^___^', '____0_', '0^_^__', '___0__', '___0__'])
 	}];
 
 		exports.default = levels;
@@ -16504,17 +16516,11 @@
 	exports.levelNumberFromHash = levelNumberFromHash;
 	exports.winConditionsMet = winConditionsMet;
 
-	var _d = __webpack_require__(196);
-
-	var _d2 = _interopRequireDefault(_d);
-
 	var _tileCodes = __webpack_require__(200);
 
 	var tileCodes = _interopRequireWildcard(_tileCodes);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// Determines whether the player is allowed to move to the given coordinates.
 	function canMoveTo(tiles, row, column) {
