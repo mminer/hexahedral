@@ -6,38 +6,57 @@ function createLevelTiles (rows) {
 
 const levels = [
   {
-    maxMoves: 7,
-    player: { row: 2, column: 0 },
+    maxMoves: 3,
+    playerPosition: { row: 1, column: 1 },
     tiles: createLevelTiles([
-      '___',
-      '___',
+      '0_',
+      '__',
+    ]),
+  },
+
+  {
+    maxMoves: 8,
+    playerPosition: { row: 0, column: 1 },
+    tiles: createLevelTiles([
+      '0__',
+      '_^_',
+      '0__',
+    ]),
+  },
+
+  {
+    maxMoves: 6,
+    playerPosition: { row: 1, column: 1 },
+    tiles: createLevelTiles([
+      '^0_',
+      '_0_',
       '0_^',
     ]),
   },
 
   {
-    maxMoves: 7,
-    player: { row: 2, column: 2 },
+    maxMoves: 8,
+    playerPosition: { row: 2, column: 0 },
     tiles: createLevelTiles([
-      '0^_',
-      '___',
-      '0^_',
+      '0__',
+      '__^',
+      '_0_',
     ]),
   },
 
   {
-    maxMoves: 13,
-    player: { row: 2, column: 0 },
+    maxMoves: 7,
+    playerPosition: { row: 2, column: 2 },
     tiles: createLevelTiles([
-      '0__',
-      '__^',
+      '0^_',
       '___',
+      '0^_',
     ]),
   },
 
   {
     maxMoves: 15,
-    player: { row: 1, column: 3 },
+    playerPosition: { row: 1, column: 3 },
     tiles: createLevelTiles([
       '_0_0',
       '^_^_',
@@ -47,11 +66,11 @@ const levels = [
   },
 
   {
-    maxMoves: 14,
-    player: { row: 2, column: 0 },
+    maxMoves: 13,
+    playerPosition: { row: 2, column: 1 },
     tiles: createLevelTiles([
       '0^__',
-      '____',
+      '__0_',
       '0^_^',
       '___0',
     ]),
@@ -59,7 +78,7 @@ const levels = [
 
   {
     maxMoves: 20,
-    player: { row: 2, column: 1 },
+    playerPosition: { row: 2, column: 1 },
     tiles: createLevelTiles([
       '__^_',
       '^___',
@@ -69,7 +88,7 @@ const levels = [
   },
   {
     maxMoves: 21,
-    player: { row: 2, column: 3 },
+    playerPosition: { row: 2, column: 3 },
     tiles: createLevelTiles([
       '_____',
       '^0_0_',
@@ -81,7 +100,7 @@ const levels = [
 
   {
     maxMoves: 27,
-    player: { row: 2, column: 0 },
+    playerPosition: { row: 2, column: 0 },
     tiles: createLevelTiles([
       '^____',
       '__^__',
@@ -93,7 +112,7 @@ const levels = [
 
   {
     maxMoves: 27,
-    player: { row: 2, column: 1 },
+    playerPosition: { row: 2, column: 1 },
     tiles: createLevelTiles([
       '_____',
       '^_^__',
@@ -105,7 +124,7 @@ const levels = [
 
   {
     maxMoves: 30,
-    player: { row: 2, column: 0 },
+    playerPosition: { row: 2, column: 0 },
     tiles: createLevelTiles([
       '0^___^',
       '0^___^',

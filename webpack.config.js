@@ -1,11 +1,10 @@
 'use strict';
 
 let cssnext = require('postcss-cssnext');
-let path = require('path');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
-  entry: path.resolve(__dirname, 'src/entry.js'),
+  entry: './src/entry.js',
   module: {
     loaders: [
       {
@@ -25,7 +24,7 @@ module.exports = {
   },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'build'),
+    path: 'build',
   },
   postcss: function () {
     return [cssnext];

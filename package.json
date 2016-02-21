@@ -3,7 +3,6 @@
     "start": "./node_modules/webpack/bin/webpack.js --progress --colors --watch"
   },
   "dependencies": {
-    "d3": "^3.5.16",
     "fastclick": "^1.0.6"
   },
   "devDependencies": {

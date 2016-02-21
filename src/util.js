@@ -1,9 +1,30 @@
 // Determines the distance between two points (i.e. with no diagonal movement).
-export function findDistance (row1, column1, row2, column2) {
-  let rowDistance = Math.abs(row1 - row2);
-  let columnDistance = Math.abs(column1 - column2);
+export function findDistance (position1, position2) {
+  let rowDistance = Math.abs(position1.row - position2.row);
+  let columnDistance = Math.abs(position1.column - position2.column);
   let distance = rowDistance + columnDistance;
   return distance;
+}
+
+// Determines whether development mode is enabled.
+export function inDevMode () {
+  const devMode = localStorage.getItem('devMode') === 'true';
+  return devMode;
+}
+
+// Gets the level number from the URL hash.
+export function levelNumberFromHash () {
+  let levelNumber = parseInt(location.hash.replace('#', '') || 0);
+  return levelNumber;
+}
+
+// Logs a console message.
+export function log (consoleFunction, ...args) {
+  if (!inDevMode()) {
+    return;
+  }
+
+  console[consoleFunction](...args);
 }
 
 // Plays an audio clip from the beginning.
