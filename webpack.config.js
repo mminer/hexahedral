@@ -5,10 +5,7 @@ let path = require('path');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
-  entry: [
-    'babel-polyfill',
-    path.resolve(__dirname, 'src/entry.js'),
-  ],
+  entry: path.resolve(__dirname, 'src/entry.js'),
   module: {
     loaders: [
       {
