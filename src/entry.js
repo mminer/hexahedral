@@ -86,6 +86,15 @@ function inDevMode () {
   return devMode;
 }
 
+// Logs a console message.
+function log (consoleFunction, ...args) {
+  if (!inDevMode()) {
+    return;
+  }
+
+  console[consoleFunction](...args);
+}
+
 // Moves the player up, down, left, or right.
 function move (rowDelta, columnDelta) {
   let newRow = player.row + rowDelta;
@@ -118,7 +127,6 @@ function moveTo (row, column) {
 // Switches ON tile to UNPRESSED; UNPRESSED tile to PRESSED.
 function toggleTile (row, column) {
   let tile = tiles[row][column];
-  console.assert(tile === tileCodes.PRESSED || tile === tileCodes.UNPRESSED);
 
   switch (tile) {
     case tileCodes.PRESSED:
@@ -215,7 +223,7 @@ function updateLevelNavigator () {
       }
 
       // Only allow jumping to completed levels (unless we're in dev mode).
-      if (!inDevMode() && !d.complete) {
+      if (!d.complete && !inDevMode()) {
         return;
       }
 
@@ -278,7 +286,7 @@ function loadLevel (levelNumber) {
   let levelExists = levelNumber in levels;
 
   if (!levelExists) {
-    console.warn(`There is no level ${levelNumber}.`);
+    log('warn', `There is no level ${levelNumber}.`);
     loadLevel(0);
     return;
   }
@@ -322,10 +330,7 @@ function win () {
   gameStatus = gameStatuses.WON;
   playSoundEffect(winAudio);
   loadNextLevelAfterDelay();
-
-  if (inDevMode()) {
-    console.info(`Completed in ${moveCount} moves.`);
-  }
+  log('info', `Completed in ${moveCount} moves.`);
 }
 
 // Admonishes the player then restarts the current level.
