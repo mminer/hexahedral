@@ -15,7 +15,6 @@ import * as gameStatuses from 'game-statuses';
 const SQUARE_SIZE = 10;
 const LOAD_NEXT_LEVEL_DELAY = 2000;
 
-const devMode = localStorage.getItem('devMode') === 'true';
 const loseAudio = document.getElementById('lose-audio');
 const moveAudio = document.getElementById('move-audio');
 const winAudio = document.getElementById('win-audio');
@@ -79,6 +78,12 @@ function handleKeyDown (event) {
 // Responds to keyup events.
 function handleKeyUp (event) {
   keysCurrentlyPressed.delete(event.keyCode);
+}
+
+// Determines whether development mode is enabled.
+function inDevMode () {
+  const devMode = localStorage.getItem('devMode') === 'true';
+  return devMode;
 }
 
 // Moves the player up, down, left, or right.
@@ -210,7 +215,7 @@ function updateLevelNavigator () {
       }
 
       // Only allow jumping to completed levels (unless we're in dev mode).
-      if (!devMode && !d.complete) {
+      if (!inDevMode() && !d.complete) {
         return;
       }
 
@@ -318,7 +323,7 @@ function win () {
   playSoundEffect(winAudio);
   loadNextLevelAfterDelay();
 
-  if (devMode) {
+  if (inDevMode()) {
     console.info(`Completed in ${moveCount} moves.`);
   }
 }
