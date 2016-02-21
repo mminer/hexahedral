@@ -12,12 +12,19 @@ import * as keyCodes from 'key-codes';
 import * as tileCodes from 'tile-codes';
 import * as gameStatuses from 'game-statuses';
 
-const SQUARE_SIZE = 10;
+const PROGRESS_STEP_WIDTH = 2;
 const LOAD_NEXT_LEVEL_DELAY = 2000;
+const SQUARE_SIZE = 10;
 
-const loseAudio = document.getElementById('lose-audio');
-const moveAudio = document.getElementById('move-audio');
-const winAudio = document.getElementById('win-audio');
+const elements = {
+  header: document.querySelector('header'),
+  progress: document.querySelector('header .progress'),
+
+  // Audio
+  loseAudio: document.querySelector('audio.lose'),
+  moveAudio: document.querySelector('audio.move'),
+  winAudio: document.querySelector('audio.win'),
+};
 
 let gameStatus = gameStatuses.PLAYING;
 let keysCurrentlyPressed = new Set();
@@ -120,7 +127,7 @@ function moveTo (row, column) {
   player.column = column;
   toggleTile(row, column);
   moveCount += 1;
-  playSoundEffect(moveAudio);
+  playSoundEffect(elements.moveAudio);
   update();
 }
 
@@ -162,8 +169,8 @@ function update () {
 
   updateLevel();
   updateLevelNavigator();
-  updateMoveCounter();
   updatePlayer();
+  updateProgress();
 }
 
 // Redraws the level.
@@ -241,32 +248,6 @@ function updateLevelNavigator () {
   selection.exit().remove();
 }
 
-// Redraws the move counter.
-function updateMoveCounter () {
-  let data = d3.range(maxMoves).map(aMove => ({ used: moveCount > aMove }));
-  let selection = d3.select('#move-counter').selectAll('.counter').data(data);
-
-  // Enter
-  selection.enter().append('div')
-      .attr('class', 'counter')
-      // Transition from 0px because a bug causes strange behaviour from 0rem.
-      .style('width', '0px')
-    .transition()
-      .duration(200)
-      .style('width', '2rem');
-
-  // Enter + Update
-  selection
-    .attr('title', `Move ${moveCount} of ${maxMoves}`)
-    .classed('used', d => d.used);
-
-  // Exit
-  selection.exit().transition()
-    .duration(200)
-    .style('width', '0px')
-    .remove();
-}
-
 // Redraws the player.
 function updatePlayer () {
   let selection = d3.select('main').selectAll('.player').data([player]);
@@ -279,6 +260,14 @@ function updatePlayer () {
     left: d => `${d.column * SQUARE_SIZE}rem`,
     top: d => `${d.row * SQUARE_SIZE}rem`,
   });
+}
+
+// Changes the width of the progress bar to indicate number of moves remaining.
+function updateProgress () {
+  let { header, progress } = elements;
+  header.style.width = `${maxMoves * PROGRESS_STEP_WIDTH}rem`;
+  header.title = `Move ${moveCount} of ${maxMoves}`;
+  progress.style.width = `${moveCount * PROGRESS_STEP_WIDTH}rem`;
 }
 
 // Loads the given level.
@@ -328,7 +317,7 @@ function reset () {
 // Congratulates the player then move onto the next level.
 function win () {
   gameStatus = gameStatuses.WON;
-  playSoundEffect(winAudio);
+  playSoundEffect(elements.winAudio);
   loadNextLevelAfterDelay();
   log('info', `Completed in ${moveCount} moves.`);
 }
@@ -336,7 +325,7 @@ function win () {
 // Admonishes the player then restarts the current level.
 function lose () {
   gameStatus = gameStatuses.LOST;
-  playSoundEffect(loseAudio);
+  playSoundEffect(elements.loseAudio);
   resetAfterDelay();
 }
 

@@ -74,8 +74,14 @@ button {
 }
 
 header {
-  display: flex;
-  justify-content: center;
+  background-color: var(--blue);
+  border: 2px solid white;
+  border-radius: var(--counter-size);
+  height: var(--counter-size);
+  margin: 0 auto;
+  opacity: var(--global-opacity);
+  overflow: hidden;
+  transition: width 0.2s;
 }
 
 main {
@@ -93,17 +99,6 @@ nav {
 
 footer {
   text-align: center;
-}
-
-#move-counter {
-  background-color: var(--blue);
-  border: 2px solid white;
-  border-radius: var(--counter-size);
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-  opacity: var(--global-opacity);
-  overflow: hidden;
 }
 
 .cell,
@@ -176,16 +171,6 @@ footer {
   }
 }
 
-.counter {
-  background-color: var(--blue);
-  height: var(--counter-size);
-  width: var(--counter-size);
-
-  &.used {
-    background-color: var(--pink);
-  }
-}
-
 .level-button {
   background-color: var(--beige);
   border: 2px solid white;
@@ -252,6 +237,12 @@ footer {
     transform: rotateY(90deg) translateX(var(--player-size));
     transform-origin: 100% 0;
   }
+}
+
+.progress {
+  background-color: var(--pink);
+  height: 100%;
+  transition: width 0.1s;
 }
 
 .reset-button {
