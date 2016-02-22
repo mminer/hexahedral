@@ -1,9 +1,10 @@
 'use strict';
 
 let cssnext = require('postcss-cssnext');
+let webpack = require('webpack');
 
 module.exports = {
-  devtool: 'cheap-module-source-map',
+  devtool: 'source-map',
   entry: './src/entry.js',
   module: {
     loaders: [
@@ -26,6 +27,14 @@ module.exports = {
     filename: 'bundle.js',
     path: 'build',
   },
+
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+      },
+    }),
+  ],
   postcss: function () {
     return [cssnext];
   },
