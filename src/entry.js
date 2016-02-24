@@ -182,6 +182,7 @@ function reset () {
   };
 
   Level.init(gameState);
+  LevelNavigator.update(gameState);
   update();
 }
 
@@ -216,7 +217,6 @@ function update () {
 
   document.body.className = gameState.status.toLowerCase();
   Level.update(gameState);
-  LevelNavigator.update(gameState);
   Player.update(gameState);
   Progress.update(gameState);
 }
