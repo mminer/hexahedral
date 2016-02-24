@@ -1,3 +1,5 @@
+const isChrome = navigator.userAgent.toLowerCase().includes('chrome');
+
 // Batch applies styles to an element; more efficient than setting individually.
 export function applyStyles (element, styles) {
   let cssText = Object.keys(styles)
@@ -38,6 +40,12 @@ export function log (consoleFunction, ...args) {
 
 // Plays an audio clip from the beginning.
 export function playSoundEffect (audio) {
+  // This is horrible, but currently audio really slows down Safari.
+  // In lieu of a better solution just disable it.
+  if (!isChrome) {
+    return;
+  }
+
   audio.pause();
   audio.currentTime = 0;
   audio.play();
