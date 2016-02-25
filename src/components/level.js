@@ -1,5 +1,5 @@
 import { h } from 'virtual-dom';
-import { SQUARE_SIZE } from 'constants';
+import { SQUARE_SIZE } from 'constants/misc';
 import Cell from 'components/cell';
 import Player from 'components/player';
 

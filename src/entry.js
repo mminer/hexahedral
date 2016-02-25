@@ -3,11 +3,17 @@ import fastClick from 'fastclick';
 import levels from 'levels';
 import render from 'render';
 import * as audio from 'audio';
-import * as keyCodes from 'key-codes';
-import * as tileCodes from 'tile-codes';
-import * as gameStatuses from 'game-statuses';
-import { findDistance, levelNumberFromHash, log, playSoundEffect } from 'util';
-import { NEXT_LEVEL_DELAY } from 'constants';
+import {
+  canMoveTo,
+  distanceFromPlayer,
+  maxMovesMet,
+  winConditionsMet,
+} from 'helpers';
+import { levelNumberFromHash, log, playSoundEffect } from 'util';
+import * as keyCodes from 'constants/key-codes';
+import * as tileCodes from 'constants/tile-codes';
+import * as gameStatuses from 'constants/game-statuses';
+import { NEXT_LEVEL_DELAY } from 'constants/misc';
 import { LOAD_LEVEL, MOVE_TO } from 'events';
 
 const keyHandlers = {
@@ -43,23 +49,6 @@ let gameState = {
 
 let keysCurrentlyPressed = new Set();
 
-// Determines whether the player is allowed to move to the given coordinates.
-function canMoveTo (row, column) {
-  if (isPositionOutOfBounds(row, column)) {
-    return false;
-  }
-
-  let tile = gameState.tiles[row][column];
-  let canMove = (tile === tileCodes.PRESSED) || (tile === tileCodes.UNPRESSED);
-  return canMove;
-}
-
-// Determines how far away the given row and column are from the player.
-function distanceFromPlayer (row, column) {
-  let distance = findDistance(gameState.playerPosition, { row, column });
-  return distance;
-}
-
 // Responds to keydown events.
 function handleKeyDown (event) {
   if (gameState.status !== gameStatuses.PLAYING) {
@@ -92,14 +81,6 @@ function handleKeyUp (event) {
   keysCurrentlyPressed.delete(event.keyCode);
 }
 
-// Determines whether a given position is beyond the level's boundaries.
-function isPositionOutOfBounds (row, column) {
-  let { tiles } = gameState;
-  let outOfBounds = (row < 0) || (column < 0) ||
-    (row >= tiles.length) || (column >= tiles[0].length);
-  return outOfBounds;
-}
-
 // Loads the given level.
 function loadLevel (levelNumber) {
   let levelExists = levelNumber in levels;
@@ -127,13 +108,6 @@ function lose () {
   resetAfterDelay();
 }
 
-// Determines whether the user has hit the maximum allowed moves.
-function maxMovesMet () {
-  let { maxMoves, moveCount } = gameState;
-  let movesMet = moveCount >= maxMoves;
-  return movesMet;
-}
-
 // Moves the player up, down, left, or right.
 function move (rowDelta, columnDelta) {
   let { playerPosition } = gameState;
@@ -144,11 +118,11 @@ function move (rowDelta, columnDelta) {
 
 // Moves the player to a specific location.
 function moveTo (row, column) {
-  if (!canMoveTo(row, column)) {
+  if (!canMoveTo(gameState, row, column)) {
     return;
   }
 
-  let invalidMoveDistance = distanceFromPlayer(row, column) !== 1;
+  let invalidMoveDistance = distanceFromPlayer(gameState, row, column) !== 1;
 
   // Ensure player only move one spot at a time.
   if (invalidMoveDistance) {
@@ -205,9 +179,9 @@ function toggleTile (row, column) {
 
 // Updates the level components with the new game state.
 function update () {
-  if (winConditionsMet(gameState.tiles)) {
+  if (winConditionsMet(gameState)) {
     win();
-  } else if (maxMovesMet()) {
+  } else if (maxMovesMet(gameState)) {
     lose();
   }
 
@@ -221,17 +195,6 @@ function win () {
   playSoundEffect(audio.win);
   loadNextLevelAfterDelay();
   log('info', `Completed in ${gameState.moveCount} moves.`);
-}
-
-// Determines whether the win conditions have been met.
-function winConditionsMet () {
-  let offTilesRemain = gameState.tiles
-    // Flatten.
-    .reduce((tileArray, rowTiles) => tileArray.concat(rowTiles), [])
-    .some(tile => tile === tileCodes.UNPRESSED);
-
-  let conditionsMet = !offTilesRemain;
-  return conditionsMet;
 }
 
 

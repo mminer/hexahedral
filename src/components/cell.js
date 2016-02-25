@@ -1,6 +1,6 @@
 import { h } from 'virtual-dom';
-import * as tileCodes from 'tile-codes';
-import { SQUARE_SIZE } from 'constants';
+import * as tileCodes from 'constants/tile-codes';
+import { SQUARE_SIZE } from 'constants/misc';
 import { MOVE_TO } from 'events';
 
 const classNames = {
