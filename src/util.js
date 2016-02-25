@@ -1,14 +1,5 @@
 const isChrome = navigator.userAgent.toLowerCase().includes('chrome');
 
-// Batch applies styles to an element; more efficient than setting individually.
-export function applyStyles (element, styles) {
-  let cssText = Object.keys(styles)
-    .map(key => `${key}: ${styles[key]}`)
-    .join(';');
-
-  element.style.cssText = cssText;
-}
-
 // Determines the distance between two points (i.e. with no diagonal movement).
 export function findDistance (position1, position2) {
   let rowDistance = Math.abs(position1.row - position2.row);

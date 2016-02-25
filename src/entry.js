@@ -1,14 +1,11 @@
 import './main.css';
 import fastClick from 'fastclick';
 import levels from 'levels';
+import render from 'render';
 import * as audio from 'audio';
 import * as keyCodes from 'key-codes';
 import * as tileCodes from 'tile-codes';
 import * as gameStatuses from 'game-statuses';
-import Level from 'components/level';
-import LevelNavigator from 'components/level-navigator';
-import Player from 'components/player';
-import Progress from 'components/progress';
 import { findDistance, levelNumberFromHash, log, playSoundEffect } from 'util';
 import { NEXT_LEVEL_DELAY } from 'constants';
 import { LOAD_LEVEL, MOVE_TO } from 'events';
@@ -41,6 +38,7 @@ let gameState = {
   moveCount: 0,
   playerPosition: { row: 0, column: 0 },
   status: gameStatuses.PLAYING,
+  tiles: [[]],
 };
 
 let keysCurrentlyPressed = new Set();
@@ -181,8 +179,6 @@ function reset () {
     tiles: tiles.map(rowTiles => rowTiles.slice()),
   };
 
-  Level.init(gameState);
-  LevelNavigator.update(gameState);
   update();
 }
 
@@ -209,16 +205,14 @@ function toggleTile (row, column) {
 
 // Updates the level components with the new game state.
 function update () {
-  if (winConditionsMet()) {
+  if (winConditionsMet(gameState.tiles)) {
     win();
   } else if (maxMovesMet()) {
     lose();
   }
 
   document.body.className = gameState.status.toLowerCase();
-  Level.update(gameState);
-  Player.update(gameState);
-  Progress.update(gameState);
+  render(gameState);
 }
 
 // Congratulates the player then move onto the next level.
@@ -260,5 +254,4 @@ document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
 document.getElementsByClassName('reset-button')[0].onclick = reset;
 fastClick.attach(document.body);
-LevelNavigator.init();
 reset();

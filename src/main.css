@@ -84,6 +84,11 @@ header {
   transition: width 0.2s;
 }
 
+footer {
+  flex-shrink: 0;
+  text-align: center;
+}
+
 main {
   margin: auto;
   position: relative;
@@ -97,8 +102,11 @@ nav {
   text-align: center;
 }
 
-footer {
-  text-align: center;
+#game {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
 }
 
 .cell,

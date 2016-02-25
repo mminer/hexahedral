@@ -3,7 +3,8 @@
     "start": "./node_modules/webpack/bin/webpack.js --progress --colors --watch"
   },
   "dependencies": {
-    "fastclick": "^1.0.6"
+    "fastclick": "^1.0.6",
+    "virtual-dom": "^2.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.5.2",
