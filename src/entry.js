@@ -212,7 +212,6 @@ document.addEventListener(MOVE_TO, event => {
   moveTo(row, column);
 });
 
-
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
 document.getElementsByClassName('reset-button')[0].onclick = reset;

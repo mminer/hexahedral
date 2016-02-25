@@ -48,9 +48,9 @@ body {
   background-image: radial-gradient(circle, var(--dark-gray), black);
   display: flex;
   flex-direction: column;
-  font-family: sans-serif;
+  font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
   overflow: hidden;
-  padding: 4rem;
+  padding: 4rem 2rem 2rem 2rem;
   transition: filter 0.5s, opacity 1s;
 
   /* Fade in when game starts. */
@@ -179,6 +179,14 @@ nav {
   }
 }
 
+.credit {
+  color: white;
+  display: block;
+  font-size: 1.2rem;
+  opacity: var(--global-opacity);
+  text-decoration: none;
+}
+
 .level-button {
   background-color: var(--beige);
   border: 2px solid white;
@@ -256,6 +264,7 @@ nav {
 .reset-button {
   background-color: transparent;
   border-width: 0;
+  margin-bottom: 3rem;
   opacity: var(--global-opacity);
   padding: 1rem;
   transition: transform 0.2s;
