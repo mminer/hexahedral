@@ -85,8 +85,25 @@ header {
 }
 
 footer {
+  color: white;
+  display: block;
   flex-shrink: 0;
+  font-size: 1.2rem;
+  font-weight: 300;
+  opacity: var(--global-opacity);
   text-align: center;
+
+  & a {
+    color: white;
+    border-bottom: 2px solid transparent;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-bottom-color 0.1s;
+
+    &:hover {
+      border-bottom-color: white;
+    }
+  }
 }
 
 main {
@@ -179,14 +196,6 @@ nav {
   }
 }
 
-.credit {
-  color: white;
-  display: block;
-  font-size: 1.2rem;
-  opacity: var(--global-opacity);
-  text-decoration: none;
-}
-
 .level-button {
   background-color: var(--beige);
   border: 2px solid white;
@@ -206,15 +215,19 @@ nav {
 
   &.complete {
     background-color: var(--blue);
+  }
+
+  &.current {
+    background-color: var(--pink);
+  }
+
+  &.complete,
+  &.current {
     cursor: pointer;
 
     &:hover {
       transform: scale(1.2);
     }
-  }
-
-  &.current {
-    background-color: var(--pink);
   }
 }
 

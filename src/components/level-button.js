@@ -11,27 +11,17 @@ export default function LevelButton ({ currentLevelNumber, levelNumber }) {
     className = 'current';
   }
 
+  // Only allow jumping to completed levels (unless we're in dev mode).
+  // Jumping to the current level effectively resets it.
+  let isLevelAvailable = (levelNumber <= currentLevelNumber) || inDevMode();
+
   return h('button.level-button', {
     className,
     key: levelNumber,
-    onclick: () => {
-      let isLevelCurrent = levelNumber === currentLevelNumber;
-
-      // Do nothing when clicking on current level.
-      if (isLevelCurrent) {
-        return;
-      }
-
-      let isLevelComplete = levelNumber < currentLevelNumber;
-
-      // Only allow jumping to completed levels (unless we're in dev mode).
-      if (!isLevelComplete && !inDevMode()) {
-        return;
-      }
-
+    onclick: isLevelAvailable ? () => {
       let event = new CustomEvent(LOAD_LEVEL, { detail: { levelNumber } });
       document.dispatchEvent(event);
-    },
+    } : null,
     title: `Level ${levelNumber}`,
     type: 'button',
   }, levelNumber);

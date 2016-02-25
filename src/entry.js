@@ -198,8 +198,6 @@ function win () {
 }
 
 
-// Initialization:
-
 // Components communicate with the upper layer via custom events.
 
 document.addEventListener(LOAD_LEVEL, event => {
@@ -212,8 +210,8 @@ document.addEventListener(MOVE_TO, event => {
   moveTo(row, column);
 });
 
+// Initialization
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
-document.getElementsByClassName('reset-button')[0].onclick = reset;
 fastClick.attach(document.body);
 reset();
