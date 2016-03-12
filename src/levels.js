@@ -73,12 +73,52 @@ const levels = [
   },
 
   {
-    maxMoves: 20,
+    maxMoves: 8,
     playerPosition: { row: 2, column: 1 },
     tiles: createLevelTiles([
-      '___',
-      '_x_',
+      '00_',
+      '0x_',
       '_x0',
+    ]),
+  },
+
+  {
+    maxMoves: 10,
+    playerPosition: { row: 1, column: 1 },
+    tiles: createLevelTiles([
+      '00x',
+      '0_0',
+      '0x0',
+    ]),
+  },
+
+  {
+    maxMoves: 12,
+    playerPosition: { row: 0, column: 2 },
+    tiles: createLevelTiles([
+      'x0_',
+      '0x_',
+      '___',
+    ]),
+  },
+
+  {
+    maxMoves: 12,
+    playerPosition: { row: 0, column: 2 },
+    tiles: createLevelTiles([
+      '0_0',
+      '_x_',
+      '0_0',
+    ]),
+  },
+
+  {
+    maxMoves: 9,
+    playerPosition: { row: 1, column: 0 },
+    tiles: createLevelTiles([
+      '00_',
+      '0x0',
+      '_0_',
     ]),
   },
 
