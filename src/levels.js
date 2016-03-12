@@ -7,10 +7,28 @@ function createLevelTiles (rows) {
 const levels = [
   {
     maxMoves: 3,
-    playerPosition: { row: 1, column: 1 },
+    playerPosition: { row: 0, column: 1 },
     tiles: createLevelTiles([
       '0_',
-      '__',
+      '00',
+    ]),
+  },
+
+  {
+    maxMoves: 3,
+    playerPosition: { row: 1, column: 1 },
+    tiles: createLevelTiles([
+      '_0',
+      '00',
+    ]),
+  },
+
+  {
+    maxMoves: 4,
+    playerPosition: { row: 1, column: 0 },
+    tiles: createLevelTiles([
+      '_0',
+      '0x',
     ]),
   },
 
@@ -18,9 +36,9 @@ const levels = [
     maxMoves: 8,
     playerPosition: { row: 0, column: 1 },
     tiles: createLevelTiles([
-      '0__',
-      '_^_',
-      '0__',
+      '_00',
+      '0x0',
+      '_00',
     ]),
   },
 
@@ -28,9 +46,9 @@ const levels = [
     maxMoves: 6,
     playerPosition: { row: 1, column: 1 },
     tiles: createLevelTiles([
-      '^0_',
-      '_0_',
-      '0_^',
+      'x_0',
+      '0_0',
+      '_0x',
     ]),
   },
 
@@ -38,9 +56,9 @@ const levels = [
     maxMoves: 8,
     playerPosition: { row: 2, column: 0 },
     tiles: createLevelTiles([
-      '0__',
-      '__^',
-      '_0_',
+      '_00',
+      '00x',
+      '0_0',
     ]),
   },
 
@@ -48,31 +66,9 @@ const levels = [
     maxMoves: 7,
     playerPosition: { row: 2, column: 2 },
     tiles: createLevelTiles([
-      '0^_',
-      '___',
-      '0^_',
-    ]),
-  },
-
-  {
-    maxMoves: 15,
-    playerPosition: { row: 1, column: 3 },
-    tiles: createLevelTiles([
-      '_0_0',
-      '^_^_',
-      '__^_',
-      '____',
-    ]),
-  },
-
-  {
-    maxMoves: 13,
-    playerPosition: { row: 2, column: 1 },
-    tiles: createLevelTiles([
-      '0^__',
-      '__0_',
-      '0^_^',
-      '___0',
+      '_x0',
+      '000',
+      '_x0',
     ]),
   },
 
@@ -80,10 +76,42 @@ const levels = [
     maxMoves: 20,
     playerPosition: { row: 2, column: 1 },
     tiles: createLevelTiles([
-      '__^_',
-      '^___',
-      '__^_',
-      '__^_',
+      '___',
+      '_x_',
+      '_x0',
+    ]),
+  },
+
+  {
+    maxMoves: 15,
+    playerPosition: { row: 1, column: 3 },
+    tiles: createLevelTiles([
+      '0_0_',
+      'x0x0',
+      '00x0',
+      '0000',
+    ]),
+  },
+
+  {
+    maxMoves: 13,
+    playerPosition: { row: 2, column: 1 },
+    tiles: createLevelTiles([
+      '_x00',
+      '00_0',
+      '_x0x',
+      '000_',
+    ]),
+  },
+
+  {
+    maxMoves: 20,
+    playerPosition: { row: 2, column: 1 },
+    tiles: createLevelTiles([
+      '00x0',
+      'x000',
+      '00x0',
+      '00x0',
     ]),
   },
 
@@ -91,11 +119,11 @@ const levels = [
     maxMoves: 21,
     playerPosition: { row: 2, column: 3 },
     tiles: createLevelTiles([
-      '_____',
-      '^0_0_',
-      '_0_0_',
-      '_0^0_',
-      '_____',
+      '00000',
+      'x_0_0',
+      '0_0_0',
+      '0_x_0',
+      '00000',
     ]),
   },
 
@@ -103,11 +131,11 @@ const levels = [
     maxMoves: 27,
     playerPosition: { row: 2, column: 0 },
     tiles: createLevelTiles([
-      '^____',
-      '__^__',
-      '^_0__',
-      '_00__',
-      '_____',
+      'x0000',
+      '00x00',
+      'x0_00',
+      '0__00',
+      '00000',
     ]),
   },
 
@@ -115,11 +143,11 @@ const levels = [
     maxMoves: 27,
     playerPosition: { row: 2, column: 1 },
     tiles: createLevelTiles([
-      '_____',
-      '^_^__',
-      '^___0',
-      '__^__',
-      '0____',
+      '00000',
+      'x0x00',
+      'x000_',
+      '00x00',
+      '_0000',
     ]),
   },
 
@@ -127,12 +155,12 @@ const levels = [
     maxMoves: 30,
     playerPosition: { row: 2, column: 0 },
     tiles: createLevelTiles([
-      '0^___^',
-      '0^___^',
-      '____0_',
-      '0^_^__',
-      '___0__',
-      '___0__',
+      '_x000x',
+      '_x000x',
+      '0000_0',
+      '_x0x00',
+      '000_00',
+      '000_00',
     ]),
   },
 ];
