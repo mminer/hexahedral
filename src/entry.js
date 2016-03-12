@@ -13,8 +13,8 @@ import { levelNumberFromHash, log, playSoundEffect } from 'util';
 import * as keyCodes from 'constants/key-codes';
 import * as tileCodes from 'constants/tile-codes';
 import * as gameStatuses from 'constants/game-statuses';
+import { LOAD_LEVEL, MOVE_TO } from 'constants/events';
 import { NEXT_LEVEL_DELAY } from 'constants/misc';
-import { LOAD_LEVEL, MOVE_TO } from 'events';
 
 const keyHandlers = {
   [keyCodes.LEFT] () {
@@ -191,10 +191,10 @@ function update () {
 
 // Congratulates the player then move onto the next level.
 function win () {
+  log('info', `Completed in ${gameState.moveCount} moves.`);
   gameState.status = gameStatuses.WON;
   playSoundEffect(audio.win);
   loadNextLevelAfterDelay();
-  log('info', `Completed in ${gameState.moveCount} moves.`);
 }
 
 

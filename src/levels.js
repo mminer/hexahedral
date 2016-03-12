@@ -86,6 +86,7 @@ const levels = [
       '__^_',
     ]),
   },
+
   {
     maxMoves: 21,
     playerPosition: { row: 2, column: 3 },

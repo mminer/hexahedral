@@ -1,7 +1,7 @@
 import { h } from 'virtual-dom';
 import * as tileCodes from 'constants/tile-codes';
+import { MOVE_TO } from 'constants/events';
 import { SQUARE_SIZE } from 'constants/misc';
-import { MOVE_TO } from 'events';
 
 const classNames = {
   [tileCodes.BROKEN]: 'broken',

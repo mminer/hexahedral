@@ -1,6 +1,6 @@
 import { h } from 'virtual-dom';
 import { inDevMode } from 'util';
-import { LOAD_LEVEL } from 'events';
+import { LOAD_LEVEL } from 'constants/events';
 
 export default function LevelButton ({ currentLevelNumber, levelNumber }) {
   let className = '';
