@@ -16,28 +16,6 @@ import * as gameStatuses from 'constants/game-statuses';
 import { LOAD_LEVEL, MOVE_TO } from 'constants/events';
 import { NEXT_LEVEL_DELAY } from 'constants/misc';
 
-const keyHandlers = {
-  [keyCodes.LEFT] () {
-    move(0, -1);
-  },
-
-  [keyCodes.UP] () {
-    move(-1, 0);
-  },
-
-  [keyCodes.RIGHT] () {
-    move(0, 1);
-  },
-
-  [keyCodes.DOWN] () {
-    move(1, 0);
-  },
-
-  [keyCodes.R] () {
-    reset();
-  },
-};
-
 let gameState = {
   currentLevelNumber: 0,
   maxMoves: Infinity,
@@ -47,38 +25,47 @@ let gameState = {
   tiles: [[]],
 };
 
-let keysCurrentlyPressed = new Set();
+// Sets up the key press listeners.
+function initializeKeyHandlers () {
+  const keyHandlers = {
+    [keyCodes.LEFT]: () => move(0, -1),
+    [keyCodes.UP]: () => move(-1, 0),
+    [keyCodes.RIGHT]: () => move(0, 1),
+    [keyCodes.DOWN]: () => move(1, 0),
+    [keyCodes.R]: reset,
+  };
 
-// Responds to keydown events.
-function handleKeyDown (event) {
-  if (gameState.status !== gameStatuses.PLAYING) {
-    return;
-  }
+  let keysCurrentlyPressed = new Set();
 
-  let { keyCode } = event;
+  document.addEventListener('keydown', evt => {
+    if (gameState.status !== gameStatuses.PLAYING) {
+      return;
+    }
 
-  // Prevent keys from repeating.
-  if (keysCurrentlyPressed.has(keyCode)) {
-    return;
-  }
+    let { keyCode } = evt;
 
-  let handler = keyHandlers[keyCode];
+    // Prevent keys from repeating.
+    if (keysCurrentlyPressed.has(keyCode)) {
+      return;
+    }
 
-  // Ignore keys that we lack a handler for.
-  if (!handler) {
-    return;
-  }
+    let handler = keyHandlers[keyCode];
 
-  handler();
-  keysCurrentlyPressed.add(keyCode);
+    // Ignore keys that we lack a handler for.
+    if (!handler) {
+      return;
+    }
 
-  event.preventDefault();
-  event.stopPropagation();
-}
+    handler();
+    keysCurrentlyPressed.add(keyCode);
 
-// Responds to keyup events.
-function handleKeyUp (event) {
-  keysCurrentlyPressed.delete(event.keyCode);
+    evt.preventDefault();
+    evt.stopPropagation();
+  });
+
+  document.addEventListener('keyup', evt => {
+    keysCurrentlyPressed.delete(evt.keyCode);
+  });
 }
 
 // Loads the given level.
@@ -147,9 +134,8 @@ function reset () {
     maxMoves,
     moveCount: 0,
     status: gameStatuses.PLAYING,
-
+    playerPosition: { row: playerPosition.row, column: playerPosition.column },
     // Create copy of level data to avoid mutating original objects.
-    playerPosition: Object.assign({}, playerPosition),
     tiles: tiles.map(rowTiles => rowTiles.slice()),
   };
 
@@ -200,18 +186,17 @@ function win () {
 
 // Components communicate with the upper layer via custom events.
 
-document.addEventListener(LOAD_LEVEL, event => {
-  let { levelNumber } = event.detail;
+document.addEventListener(LOAD_LEVEL, evt => {
+  let { levelNumber } = evt.detail;
   loadLevel(levelNumber);
 });
 
-document.addEventListener(MOVE_TO, event => {
-  let { row, column } = event.detail;
+document.addEventListener(MOVE_TO, evt => {
+  let { row, column } = evt.detail;
   moveTo(row, column);
 });
 
 // Initialization
-document.addEventListener('keydown', handleKeyDown);
-document.addEventListener('keyup', handleKeyUp);
+initializeKeyHandlers();
 fastClick.attach(document.body);
 reset();

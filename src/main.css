@@ -61,11 +61,11 @@ body {
   }
 
   &.won {
-    filter: blur(3px);
+    filter: blur(0.3rem);
   }
 
   &.lost {
-    filter: blur(3px) grayscale(100%);
+    filter: blur(0.3rem) grayscale(100%);
   }
 }
 
@@ -75,7 +75,7 @@ button {
 
 header {
   background-color: var(--blue);
-  border: 2px solid white;
+  border: 0.2rem solid white;
   border-radius: var(--counter-size);
   height: var(--counter-size);
   margin: 0 auto;
@@ -95,7 +95,7 @@ footer {
 
   & a {
     color: white;
-    border-bottom: 2px solid transparent;
+    border-bottom: 0.2rem solid transparent;
     font-weight: 500;
     text-decoration: none;
     transition: border-bottom-color 0.1s;
@@ -198,7 +198,7 @@ nav {
 
 .level-button {
   background-color: var(--beige);
-  border: 2px solid white;
+  border: 0.2rem solid white;
   border-radius: 50%;
   cursor: default;
   height: var(--level-button-size);
