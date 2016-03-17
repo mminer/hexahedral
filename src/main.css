@@ -116,6 +116,8 @@ main {
 
 nav {
   margin-bottom: 4rem;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
 }
 
@@ -193,6 +195,17 @@ nav {
     &::before {
       background-color: color(var(--beige) tint(14%));
     }
+  }
+}
+
+.difficulty-row {
+  background-color: transparent;
+  border-radius: 2rem;
+  padding: 1rem;
+  transition: background-color 0.2s;
+
+  &.active {
+    background-color: black;
   }
 }
 
