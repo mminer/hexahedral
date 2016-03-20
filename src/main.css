@@ -199,10 +199,6 @@ nav {
   border-radius: 2rem;
   padding: 1rem;
   transition: background-color 0.2s;
-
-  &.active {
-    background-color: black;
-  }
 }
 
 .level-button {
