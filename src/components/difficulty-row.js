@@ -1,5 +1,4 @@
 import { h } from 'virtual-dom';
-import levels from 'levels';
 import LevelButton from 'components/level-button';
 
 export default function DifficultyRow ({ currentLevelNumber, levelNumbers }) {

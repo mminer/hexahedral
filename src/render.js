@@ -17,8 +17,8 @@ function update (newTree) {
 }
 
 // Applies the game state to the DOM.
-export default function render (gameState) {
-  let newTree = Game(gameState);
+export default function render (state) {
+  let newTree = Game(state);
 
   if (!rootNode) {
     init(newTree);

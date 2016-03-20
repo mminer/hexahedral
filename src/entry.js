@@ -2,7 +2,8 @@ import './main.css';
 import fastClick from 'fastclick';
 import levels from 'levels';
 import render from 'render';
-import * as audio from 'audio';
+import store from 'store';
+import { loseAudio, moveAudio, winAudio } from 'audio';
 import {
   canMoveTo,
   distanceFromPlayer,
@@ -10,42 +11,47 @@ import {
   winConditionsMet,
 } from 'helpers';
 import { levelNumberFromHash, log, playSoundEffect } from 'util';
-import * as keyCodes from 'constants/key-codes';
-import * as tileCodes from 'constants/tile-codes';
-import * as gameStatuses from 'constants/game-statuses';
+import { LOSE, MOVE, RESET, WIN } from 'constants/actions';
 import { LOAD_LEVEL, MOVE_TO } from 'constants/events';
+import { PLAYING } from 'constants/game-statuses';
+import { DOWN, LEFT, R, RIGHT, UP } from 'constants/key-codes';
 import { NEXT_LEVEL_DELAY } from 'constants/misc';
 
-let gameState = {
-  currentLevelNumber: 0,
-  maxMoves: Infinity,
-  moveCount: 0,
-  playerPosition: { row: 0, column: 0 },
-  status: gameStatuses.PLAYING,
-  tiles: [[]],
-};
+// Checks whether the level has been won or lost.
+function checkForWinOrLoss () {
+  let state = store.getState();
+
+  if (winConditionsMet(state)) {
+    win();
+  } else if (maxMovesMet(state)) {
+    lose();
+  }
+}
 
 // Sets up the key press listeners.
 function initializeKeyHandlers () {
   const keyHandlers = {
-    [keyCodes.LEFT]: () => move(0, -1),
-    [keyCodes.UP]: () => move(-1, 0),
-    [keyCodes.RIGHT]: () => move(0, 1),
-    [keyCodes.DOWN]: () => move(1, 0),
-    [keyCodes.R]: reset,
+    [LEFT]: () => move(0, -1),
+    [UP]: () => move(-1, 0),
+    [RIGHT]: () => move(0, 1),
+    [DOWN]: () => move(1, 0),
+    [R]: reset,
   };
 
   let keysCurrentlyPressed = new Set();
 
   document.addEventListener('keydown', evt => {
-    if (gameState.status !== gameStatuses.PLAYING) {
-      return;
-    }
-
     let { keyCode } = evt;
 
     // Prevent keys from repeating.
     if (keysCurrentlyPressed.has(keyCode)) {
+      return;
+    }
+
+    let isPlaying = store.getState().status === PLAYING;
+
+    // Ignore key presses when we're transitioning between levels.
+    if (!isPlaying) {
       return;
     }
 
@@ -74,8 +80,7 @@ function loadLevel (levelNumber) {
 
   if (!levelExists) {
     log('warn', `There is no level ${levelNumber}.`);
-    loadLevel(0);
-    return;
+    levelNumber = 0;
   }
 
   location.hash = levelNumber;
@@ -84,20 +89,21 @@ function loadLevel (levelNumber) {
 
 // Loads the next level after a pause.
 function loadNextLevelAfterDelay () {
-  let nextLevelNumber = gameState.currentLevelNumber + 1;
+  let { currentLevelNumber } = store.getState();
+  let nextLevelNumber = currentLevelNumber + 1;
   setTimeout(() => loadLevel(nextLevelNumber), NEXT_LEVEL_DELAY);
 }
 
 // Admonishes the player then restarts the current level.
 function lose () {
-  gameState.status = gameStatuses.LOST;
-  playSoundEffect(audio.lose);
+  store.dispatch({ type: LOSE });
+  playSoundEffect(loseAudio);
   resetAfterDelay();
 }
 
 // Moves the player up, down, left, or right.
 function move (rowDelta, columnDelta) {
-  let { playerPosition } = gameState;
+  let { playerPosition } = store.getState();
   let row = playerPosition.row + rowDelta;
   let column = playerPosition.column + columnDelta;
   moveTo(row, column);
@@ -105,41 +111,28 @@ function move (rowDelta, columnDelta) {
 
 // Moves the player to a specific location.
 function moveTo (row, column) {
-  if (!canMoveTo(gameState, row, column)) {
+  let state = store.getState();
+
+  if (!canMoveTo(state, row, column)) {
     return;
   }
 
-  let invalidMoveDistance = distanceFromPlayer(gameState, row, column) !== 1;
+  let invalidMoveDistance = distanceFromPlayer(state, row, column) !== 1;
 
   // Ensure player only move one spot at a time.
   if (invalidMoveDistance) {
     return;
   }
 
-  gameState.moveCount += 1;
-  gameState.playerPosition = { row, column };
-  toggleTile(row, column);
-  playSoundEffect(audio.move);
-  update();
+  store.dispatch({ type: MOVE, row, column });
+  playSoundEffect(moveAudio);
+  checkForWinOrLoss();
 }
 
-// Loads the level.
+// Resets the current level.
 function reset () {
   let currentLevelNumber = levelNumberFromHash();
-  let level = levels[currentLevelNumber];
-  let { maxMoves, playerPosition, tiles } = level;
-
-  gameState = {
-    currentLevelNumber,
-    maxMoves,
-    moveCount: 0,
-    status: gameStatuses.PLAYING,
-    playerPosition: { row: playerPosition.row, column: playerPosition.column },
-    // Create copy of level data to avoid mutating original objects.
-    tiles: tiles.map(rowTiles => rowTiles.slice()),
-  };
-
-  update();
+  store.dispatch({ type: RESET, levelNumber: currentLevelNumber });
 }
 
 // Reloads the current level after a pause.
@@ -147,44 +140,17 @@ function resetAfterDelay () {
   setTimeout(reset, NEXT_LEVEL_DELAY);
 }
 
-// Switches ON tile to UNPRESSED; UNPRESSED tile to PRESSED.
-function toggleTile (row, column) {
-  let { tiles } = gameState;
-  let tile = tiles[row][column];
-
-  switch (tile) {
-    case tileCodes.PRESSED:
-      tiles[row][column] = tileCodes.UNPRESSED;
-      break;
-
-    case tileCodes.UNPRESSED:
-      tiles[row][column] = tileCodes.PRESSED;
-      break;
-  }
-}
-
-// Updates the level components with the new game state.
-function update () {
-  if (winConditionsMet(gameState)) {
-    win();
-  } else if (maxMovesMet(gameState)) {
-    lose();
-  }
-
-  document.body.className = gameState.status.toLowerCase();
-  render(gameState);
-}
-
 // Congratulates the player then move onto the next level.
 function win () {
-  log('info', `Completed in ${gameState.moveCount} moves.`);
-  gameState.status = gameStatuses.WON;
-  playSoundEffect(audio.win);
+  let { moveCount } = store.getState();
+  log('info', `Completed in ${moveCount} moves.`);
+  store.dispatch({ type: WIN });
+  playSoundEffect(winAudio);
   loadNextLevelAfterDelay();
 }
 
 
-// Components communicate with the upper layer via custom events.
+// Components communicate with the upper layer via custom events:
 
 document.addEventListener(LOAD_LEVEL, evt => {
   let { levelNumber } = evt.detail;
@@ -196,7 +162,14 @@ document.addEventListener(MOVE_TO, evt => {
   moveTo(row, column);
 });
 
-// Initialization
+
+// Initialization:
+
+store.subscribe(() => {
+  let state = store.getState();
+  render(state);
+});
+
 initializeKeyHandlers();
 fastClick.attach(document.body);
 reset();

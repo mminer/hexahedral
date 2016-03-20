@@ -1,5 +1,5 @@
 import { h } from 'virtual-dom';
-import { inDevMode } from 'util';
+import { devModeEnabled } from 'prefs';
 import { LOAD_LEVEL } from 'constants/events';
 
 export default function LevelButton ({ currentLevelNumber, levelNumber }) {
@@ -13,7 +13,7 @@ export default function LevelButton ({ currentLevelNumber, levelNumber }) {
 
   // Only allow jumping to completed levels (unless we're in dev mode).
   // Jumping to the current level effectively resets it.
-  let isLevelAvailable = (levelNumber <= currentLevelNumber) || inDevMode();
+  let isLevelAvailable = devModeEnabled || (levelNumber <= currentLevelNumber);
 
   return h('button.level-button', {
     className,

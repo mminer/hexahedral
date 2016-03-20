@@ -1,12 +1,12 @@
 import { h } from 'virtual-dom';
-import * as tileCodes from 'constants/tile-codes';
 import { MOVE_TO } from 'constants/events';
 import { SQUARE_SIZE } from 'constants/misc';
+import { BROKEN, PRESSED, UNPRESSED } from 'constants/tile-codes';
 
 const classNames = {
-  [tileCodes.BROKEN]: 'broken',
-  [tileCodes.PRESSED]: 'pressed',
-  [tileCodes.UNPRESSED]: 'unpressed',
+  [BROKEN]: 'broken',
+  [PRESSED]: 'pressed',
+  [UNPRESSED]: 'unpressed',
 };
 
 export default function Cell ({ tile, row, column }) {
