@@ -1,4 +1,4 @@
-import { audioDisabled, devModeEnabled } from 'prefs';
+import { AUDIO_DISABLED, DEV_MODE_ENABLED } from 'constants/prefs';
 
 const isChrome = navigator.userAgent.toLowerCase().includes('chrome');
 
@@ -34,7 +34,7 @@ export function levelNumberFromHash () {
 
 // Logs a console message.
 export function log (consoleFunction, ...args) {
-  if (!devModeEnabled) {
+  if (!DEV_MODE_ENABLED) {
     return;
   }
 
@@ -43,7 +43,7 @@ export function log (consoleFunction, ...args) {
 
 // Plays an audio clip from the beginning.
 export function playSoundEffect (audio) {
-  if (audioDisabled) {
+  if (AUDIO_DISABLED) {
     return;
   }
 
