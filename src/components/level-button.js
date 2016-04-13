@@ -1,5 +1,5 @@
 import { h } from 'virtual-dom';
-import { LOAD_LEVEL } from 'constants/events';
+import { fireLoadLevelEvent } from 'util';
 import { DEV_MODE_ENABLED } from 'constants/prefs';
 
 export default function LevelButton ({ currentLevelNumber, levelNumber }) {
@@ -19,10 +19,7 @@ export default function LevelButton ({ currentLevelNumber, levelNumber }) {
   return h('button.level-button', {
     className,
     key: levelNumber,
-    onclick: isLevelAvailable ? () => {
-      let event = new CustomEvent(LOAD_LEVEL, { detail: { levelNumber } });
-      document.dispatchEvent(event);
-    } : null,
+    onclick: isLevelAvailable ? () => fireLoadLevelEvent(levelNumber) : null,
     title: `Level ${levelNumber}`,
     type: 'button',
   }, levelNumber);
