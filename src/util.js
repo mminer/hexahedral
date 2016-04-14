@@ -51,12 +51,6 @@ export function fireLoadLevelEvent (levelNumber) {
   document.dispatchEvent(event);
 }
 
-// Gets the level number from the URL hash.
-export function levelNumberFromHash () {
-  let levelNumber = parseInt(location.hash.replace('#', '') || 0);
-  return levelNumber;
-}
-
 // Gets the level numbers that are part of the given difficulty range.
 export function levelNumbersInDifficulty (difficulty) {
   let levelNumbers = [];

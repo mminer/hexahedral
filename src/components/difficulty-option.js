@@ -6,8 +6,8 @@ export default function DifficultyOption ({
   label,
 }) {
   return h('option', {
+    key: difficulty,
     selected: currentDifficulty === difficulty,
     value: difficulty,
   }, label);
 }
-

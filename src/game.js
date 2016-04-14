@@ -7,7 +7,7 @@ import {
   winConditionsMet,
 } from 'helpers';
 import { levelNumberFromHash, log, playSoundEffect } from 'util';
-import { LOSE, MOVE, RESET, WIN } from 'constants/actions';
+import { LOAD_LEVEL, LOSE, MOVE, WIN } from 'constants/actions';
 import { LOSE_AUDIO, MOVE_AUDIO, WIN_AUDIO } from 'constants/audio';
 import { NEXT_LEVEL_DELAY } from 'constants/misc';
 
@@ -31,8 +31,7 @@ function loadLevel (levelNumber) {
     levelNumber = 0;
   }
 
-  location.hash = levelNumber;
-  reset();
+  store.dispatch({ type: LOAD_LEVEL, levelNumber });
 }
 
 // Loads the next level after a pause.
@@ -79,8 +78,8 @@ function moveTo (row, column) {
 
 // Resets the current level.
 function reset () {
-  let currentLevelNumber = levelNumberFromHash();
-  store.dispatch({ type: RESET, levelNumber: currentLevelNumber });
+  let { currentLevelNumber } = store.getState();
+  loadLevel(currentLevelNumber);
 }
 
 // Reloads the current level after a pause.

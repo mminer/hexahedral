@@ -1,53 +1,53 @@
 import { combineReducers } from 'redux';
 import levels from 'levels';
 import { createReducer } from 'util';
-import { LOSE, MOVE, RESET, WIN } from 'constants/actions';
+import { LOAD_LEVEL, LOSE, MOVE, WIN } from 'constants/actions';
 import { LOST, PLAYING, WON } from 'constants/game-statuses';
 import { PRESSED, UNPRESSED } from 'constants/tile-codes';
 
 export default combineReducers({
   currentLevelNumber: createReducer(0, {
-    [RESET] (state, { levelNumber }) {
+    [LOAD_LEVEL] (state, { levelNumber }) {
       return levelNumber;
     },
   }),
 
   maxMoves: createReducer(Infinity, {
-    [RESET] (state, { levelNumber }) {
+    [LOAD_LEVEL] (state, { levelNumber }) {
       let level = levels[levelNumber];
       return level.maxMoves;
     },
   }),
 
   moveCount: createReducer(0, {
-    [MOVE] (state) {
-      return state + 1;
+    [LOAD_LEVEL] () {
+      return 0;
     },
 
-    [RESET] () {
-      return 0;
+    [MOVE] (state) {
+      return state + 1;
     },
   }),
 
   playerPosition: createReducer({ row: 0, column: 0 }, {
-    [MOVE] (state, { row, column }) {
+    [LOAD_LEVEL] (state, { levelNumber }) {
+      let level = levels[levelNumber];
+      let { row, column } = level.playerPosition;
       return { row, column };
     },
 
-    [RESET] (state, { levelNumber }) {
-      let level = levels[levelNumber];
-      let { row, column } = level.playerPosition;
+    [MOVE] (state, { row, column }) {
       return { row, column };
     },
   }),
 
   status: createReducer(PLAYING, {
-    [LOSE] () {
-      return LOST;
+    [LOAD_LEVEL] () {
+      return PLAYING;
     },
 
-    [RESET] () {
-      return PLAYING;
+    [LOSE] () {
+      return LOST;
     },
 
     [WIN] () {
@@ -56,6 +56,11 @@ export default combineReducers({
   }),
 
   tiles: createReducer([[]], {
+    [LOAD_LEVEL] (state, { levelNumber }) {
+      let level = levels[levelNumber];
+      return level.tiles.map(rowTiles => rowTiles.slice());
+    },
+
     [MOVE] (state, { row, column }) {
       // Toggle the tile at the new position.
       let currentTile = state[row][column];
@@ -63,11 +68,6 @@ export default combineReducers({
       state = state.map(rowTiles => rowTiles.slice());
       state[row][column] = newTile;
       return state;
-    },
-
-    [RESET] (state, { levelNumber }) {
-      let level = levels[levelNumber];
-      return level.tiles.map(rowTiles => rowTiles.slice());
     },
   }),
 });
