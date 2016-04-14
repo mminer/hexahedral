@@ -1,26 +1,19 @@
 import { h } from 'virtual-dom';
 import DifficultyOption from 'components/difficulty-option';
-import { fireLoadLevelEvent } from 'util';
 import { EASY, MEDIUM, HARD } from 'constants/difficulty-levels';
 
-export default function DifficultySelector ({ currentDifficulty }) {
+const startingLevelNumbers = {
+  [EASY]: 0,
+  [MEDIUM]: 10,
+  [HARD]: 20,
+};
+
+export default function DifficultySelector ({ currentDifficulty, loadLevel }) {
   return h('select.difficulty-selector', {
     onchange: evt => {
       let newDifficulty = evt.target.value;
-
-      switch (newDifficulty) {
-        case EASY:
-          fireLoadLevelEvent(0);
-          break;
-
-        case MEDIUM:
-          fireLoadLevelEvent(10);
-          break;
-
-        case HARD:
-          fireLoadLevelEvent(20);
-          break;
-      }
+      let newLevelNumber = startingLevelNumbers[newDifficulty];
+      loadLevel(newLevelNumber);
     },
     title: 'Difficulty',
   }, [

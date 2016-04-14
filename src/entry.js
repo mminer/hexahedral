@@ -3,7 +3,6 @@ import fastClick from 'fastclick';
 import render from 'render';
 import store from 'store';
 import { loadLevel, move, moveTo, reset } from 'game';
-import { LOAD_LEVEL, MOVE_TO } from 'constants/events';
 import { PLAYING } from 'constants/game-statuses';
 import { DOWN, LEFT, R, RIGHT, UP } from 'constants/key-codes';
 
@@ -50,19 +49,11 @@ document.addEventListener('keyup', evt => {
   keysCurrentlyPressed.delete(evt.keyCode);
 });
 
-document.addEventListener(LOAD_LEVEL, evt => {
-  let { levelNumber } = evt.detail;
-  loadLevel(levelNumber);
-});
-
-document.addEventListener(MOVE_TO, evt => {
-  let { row, column } = evt.detail;
-  moveTo(row, column);
-});
-
 store.subscribe(() => {
-  let state = store.getState();
-  render(state);
+  let props = store.getState();
+  props.loadLevel = loadLevel;
+  props.moveTo = moveTo;
+  render(props);
 });
 
 fastClick.attach(document.body);

@@ -3,9 +3,12 @@ import { SQUARE_SIZE } from 'constants/misc';
 import Cell from 'components/cell';
 import Player from 'components/player';
 
-export default function Level ({ playerPosition, tiles }) {
+export default function Level ({ moveTo, playerPosition, tiles }) {
   let cells = tiles.reduce((cellArray, rowTiles, row) => {
-    let rowCells = rowTiles.map((tile, column) => Cell({ tile, row, column }));
+    let rowCells = rowTiles.map((tile, column) =>
+      Cell({ column, moveTo, row, tile })
+    );
+
     return cellArray.concat(rowCells);
   }, []);
 

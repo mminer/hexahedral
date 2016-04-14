@@ -3,11 +3,11 @@ import DifficultyRow from 'components/difficulty-row';
 import DifficultySelector from 'components/difficulty-selector';
 import { difficultyFromLevelNumber } from 'util';
 
-export default function LevelNavigator ({ currentLevelNumber }) {
+export default function LevelNavigator ({ currentLevelNumber, loadLevel }) {
   let currentDifficulty = difficultyFromLevelNumber(currentLevelNumber);
 
   return h('nav', [
-    DifficultySelector({ currentDifficulty }),
-    DifficultyRow({ currentDifficulty, currentLevelNumber }),
+    DifficultySelector({ currentDifficulty, loadLevel }),
+    DifficultyRow({ currentDifficulty, currentLevelNumber, loadLevel }),
   ]);
 }

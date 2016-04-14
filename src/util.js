@@ -1,6 +1,5 @@
 import levels from 'levels';
 import { EASY, MEDIUM, HARD } from 'constants/difficulty-levels';
-import { LOAD_LEVEL } from 'constants/events';
 import { AUDIO_DISABLED, DEV_MODE_ENABLED } from 'constants/prefs';
 
 const allLevelNumbers = levels.map((level, levelNumber) => levelNumber);
@@ -43,12 +42,6 @@ export function findDistance (position1, position2) {
   let columnDistance = Math.abs(position1.column - position2.column);
   let distance = rowDistance + columnDistance;
   return distance;
-}
-
-// Loads a level by firing a custom event.
-export function fireLoadLevelEvent (levelNumber) {
-  let event = new CustomEvent(LOAD_LEVEL, { detail: { levelNumber } });
-  document.dispatchEvent(event);
 }
 
 // Gets the level numbers that are part of the given difficulty range.
