@@ -1,5 +1,6 @@
 :root {
   --global-opacity: 0.95;
+  --ui-border: 0.2rem solid white;
 
   /* Colors */
   --beige: #CCB6A0;
@@ -16,12 +17,12 @@
   --square-size: 10rem;
 }
 
-@keyframes player-bob {
-  50% { transform: translateZ(13rem); }
+@keyframes breathe {
+  50% { transform: translateZ(8rem) scale(0.95); }
 }
 
-@keyframes unpressed-breathe {
-  50% { transform: translateZ(8rem) scale(0.95); }
+@keyframes player-bob {
+  50% { transform: translateZ(13rem); }
 }
 
 *,
@@ -61,7 +62,7 @@ button {
 
 header {
   background-color: var(--blue);
-  border: 0.2rem solid white;
+  border: var(--ui-border);
   border-radius: var(--counter-size);
   height: var(--counter-size);
   margin: 0 auto;
@@ -171,7 +172,7 @@ nav {
   }
 
   &.unpressed {
-    animation: unpressed-breathe 2s ease-in-out infinite;
+    animation: breathe 2s ease-in-out infinite;
     background-color: var(--pink);
     transform: translateZ(8rem);
 
@@ -197,10 +198,56 @@ nav {
   }
 }
 
+.difficulty-buttons {
+  animation: breathe 2s ease-in-out infinite;
+  margin: auto;
+  opacity: var(--global-opacity);
+  text-align: center;
+
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+.difficulty-button {
+  appearance: none;
+  background-color: var(--blue);
+  border: var(--ui-border);
+  border-radius: 0.4rem;
+  color: white;
+  display: block;
+  padding: 1rem 6rem;
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  transition: transform 0.1s;
+  width: 100%;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:nth-child(1) {
+    background-color: var(--green);
+  }
+
+  &:nth-child(2) {
+    background-color: var(--blue);
+  }
+
+  &:nth-child(3) {
+    background-color: var(--pink);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .difficulty-selector {
   appearance: none;
   background-color: transparent;
-  border: 0.2rem solid white;
+  border: var(--ui-border);
   border-radius: 0.4rem;
   color: white;
   font-weight: 500;
@@ -208,18 +255,23 @@ nav {
   margin: 0 0.5rem;
   margin-bottom: 1rem;
   padding: 0 1rem;
+  transition: transform 0.1s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .level-button {
-  background-color: var(--beige);
-  border: 0.2rem solid white;
+  background-color: transparent;
+  border: var(--ui-border);
   border-radius: 50%;
   cursor: default;
   height: var(--level-button-size);
   padding: 0;
   margin: 0 0.5rem;
   margin-bottom: 1rem;
-  transition: all 0.2s;
+  transition: all 0.1s;
   width: var(--level-button-size);
 
   /* Hide text. */

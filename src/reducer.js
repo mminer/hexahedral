@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import levels from 'levels';
 import { createReducer } from 'util';
 import { LOAD_LEVEL, LOSE, MOVE, WIN } from 'constants/actions';
-import { LOST, PLAYING, WON } from 'constants/game-statuses';
+import { LOST, MAIN_MENU, PLAYING, WON } from 'constants/game-statuses';
 import { PRESSED, UNPRESSED } from 'constants/tile-codes';
 
 export default combineReducers({
@@ -41,7 +41,7 @@ export default combineReducers({
     },
   }),
 
-  status: createReducer(PLAYING, {
+  status: createReducer(MAIN_MENU, {
     [LOAD_LEVEL] () {
       return PLAYING;
     },

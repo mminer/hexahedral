@@ -49,12 +49,13 @@ document.addEventListener('keyup', evt => {
   keysCurrentlyPressed.delete(evt.keyCode);
 });
 
-store.subscribe(() => {
+function renderProps () {
   let props = store.getState();
   props.loadLevel = loadLevel;
   props.moveTo = moveTo;
   render(props);
-});
+}
 
 fastClick.attach(document.body);
-reset();
+store.subscribe(renderProps);
+renderProps();
