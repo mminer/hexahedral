@@ -1,9 +1,9 @@
 # Hexahedral
 
 This is my submission to the 2016 [Global Game Jam](http://globalgamejam.org/).
-Play the game by visiting http://matthewminer.com/hexahedral.
+Play the game by visiting http://matthewminer.com/ggj2016.
 
-![Screenshot](https://raw.github.com/mminer/hexahedral/master/screenshot.png)
+![Screenshot](https://raw.github.com/mminer/ggj2016/master/screenshot.png)
 
 Push down all the blocks in the minimum number of moves. Exciting? Hoo boy, you
 bet your sweet granddaddy it is.
