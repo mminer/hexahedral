@@ -21,21 +21,6 @@ export function createReducer (initialState, handlers = {}) {
   return reducer;
 }
 
-// Finds the difficulty level for the given level number.
-export function difficultyFromLevelNumber (levelNumber) {
-  let difficulty = '';
-
-  if (levelNumber < 10) {
-    difficulty = EASY;
-  } else if (levelNumber < 20) {
-    difficulty = MEDIUM;
-  } else {
-    difficulty = HARD;
-  }
-
-  return difficulty;
-}
-
 // Determines the distance between two points (i.e. with no diagonal movement).
 export function findDistance (position1, position2) {
   let rowDistance = Math.abs(position1.row - position2.row);

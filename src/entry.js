@@ -49,6 +49,7 @@ document.addEventListener('keyup', evt => {
   keysCurrentlyPressed.delete(evt.keyCode);
 });
 
+// Provides the UI with the game state.
 function renderProps () {
   let props = store.getState();
   props.loadLevel = loadLevel;

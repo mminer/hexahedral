@@ -4,7 +4,7 @@
   },
   "dependencies": {
     "fastclick": "^1.0.6",
-    "redux": "^3.4.0",
+    "redux": "^3.5.1",
     "virtual-dom": "^2.1.1"
   },
   "devDependencies": {

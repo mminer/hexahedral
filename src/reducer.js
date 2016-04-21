@@ -2,10 +2,26 @@ import { combineReducers } from 'redux';
 import levels from 'levels';
 import { createReducer } from 'util';
 import { LOAD_LEVEL, LOSE, MOVE, WIN } from 'constants/actions';
+import { STARTING_LEVEL_NUMBERS } from 'constants/difficulty';
+import { EASY, MEDIUM, HARD } from 'constants/difficulty-levels';
 import { LOST, MAIN_MENU, PLAYING, WON } from 'constants/game-statuses';
 import { PRESSED, UNPRESSED } from 'constants/tile-codes';
 
 export default combineReducers({
+  currentDifficulty: createReducer(EASY, {
+    [LOAD_LEVEL] (state, { levelNumber }) {
+      if (levelNumber < STARTING_LEVEL_NUMBERS[MEDIUM]) {
+        state = EASY;
+      } else if (levelNumber < STARTING_LEVEL_NUMBERS[HARD]) {
+        state = MEDIUM;
+      } else {
+        state = HARD;
+      }
+
+      return state;
+    },
+  }),
+
   currentLevelNumber: createReducer(0, {
     [LOAD_LEVEL] (state, { levelNumber }) {
       return levelNumber;

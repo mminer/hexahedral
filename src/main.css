@@ -1,5 +1,6 @@
 :root {
   --global-opacity: 0.95;
+  --level-transform: translate(-50%, -50%) rotateX(45deg) rotateZ(45deg);
   --ui-border: 0.2rem solid white;
 
   /* Colors */
@@ -52,7 +53,7 @@ body {
   font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
   opacity: 1;
   overflow: hidden;
-  padding: 4rem 2rem 2rem 2rem;
+  padding: 0;
   transition: opacity 1s;
 }
 
@@ -64,11 +65,12 @@ header {
   background-color: var(--blue);
   border: var(--ui-border);
   border-radius: var(--counter-size);
+  flex-shrink: 0;
   height: var(--counter-size);
   margin: 0 auto;
+  margin-top: 2rem;
   opacity: var(--global-opacity);
   overflow: hidden;
-  transition: width 0.2s;
 }
 
 footer {
@@ -77,6 +79,7 @@ footer {
   flex-shrink: 0;
   font-size: 1.2rem;
   font-weight: 300;
+  margin-bottom: 2rem;
   margin-top: auto;
   opacity: var(--global-opacity);
   text-align: center;
@@ -95,17 +98,17 @@ footer {
 }
 
 main {
-  margin: auto;
+  flex-grow: 1;
   position: relative;
-  transform: rotateX(45deg) rotateZ(45deg);
-  transform-style: preserve-3d;
-  transition: all 0.2s;
 }
 
 nav {
   display: flex;
   flex-direction: row;
-  margin-bottom: 3rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 1rem;
   margin-left: auto;
   margin-right: auto;
   opacity: var(--global-opacity);
@@ -139,6 +142,7 @@ nav {
   position: absolute;
   touch-action: manipulation;
   transition: all 0.1s;
+  transform-style: preserve-3d;
   width: var(--cell-size);
 }
 
@@ -202,6 +206,7 @@ nav {
   animation: breathe 2s ease-in-out infinite;
   margin: auto;
   opacity: var(--global-opacity);
+  padding: 2rem;
   text-align: center;
 
   &:hover {
@@ -213,12 +218,13 @@ nav {
   appearance: none;
   background-color: var(--blue);
   border: var(--ui-border);
-  border-radius: 0.4rem;
+  border-radius: 2.5rem;
   color: white;
   display: block;
   padding: 1rem 6rem;
   font-size: 2rem;
   font-weight: 500;
+  height: 5rem;
   margin-bottom: 1rem;
   transition: transform 0.1s;
   width: 100%;
@@ -244,15 +250,21 @@ nav {
   }
 }
 
+.difficulty-row {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 .difficulty-selector {
   appearance: none;
   background-color: transparent;
   border: var(--ui-border);
-  border-radius: 0.4rem;
+  border-radius: 1rem;
   color: white;
+  flex-shrink: 0;
   font-weight: 500;
   height: var(--level-button-size);
-  margin: 0 0.5rem;
+  margin: 0 0.4rem;
   margin-bottom: 1rem;
   padding: 0 1rem;
   transition: transform 0.1s;
@@ -262,6 +274,16 @@ nav {
   }
 }
 
+.level {
+  left: 50%;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  transform: var(--level-transform);
+  transform-style: preserve-3d;
+  transition: all 0.2s;
+}
+
 .level-button {
   background-color: transparent;
   border: var(--ui-border);
@@ -269,7 +291,7 @@ nav {
   cursor: default;
   height: var(--level-button-size);
   padding: 0;
-  margin: 0 0.5rem;
+  margin: 0 0.4rem;
   margin-bottom: 1rem;
   transition: all 0.1s;
   width: var(--level-button-size);
@@ -338,4 +360,54 @@ nav {
   background-color: var(--pink);
   height: 100%;
   transition: width 0.1s;
+}
+
+
+/* Media Queries */
+
+@media (height <= 700px) {
+  /* After removing the footer, header + nav take up 80px. */
+  #game:not(.main-menu) + footer {
+    display: none;
+  }
+
+  .hard   .level { transform: var(--level-transform) scale3d(0.92, 0.92, 0.92); }
+}
+
+@media (width <= 700px) {
+  .hard   .level { transform: var(--level-transform) scale3d(0.84, 0.84, 0.84); }
+}
+
+@media (height <= 600px) {
+  .medium .level { transform: var(--level-transform) scale3d(0.88, 0.88, 0.88); }
+  .hard   .level { transform: var(--level-transform) scale3d(0.74, 0.74, 0.74); }
+}
+
+@media (width <= 600px) {
+  .medium .level { transform: var(--level-transform) scale3d(0.88, 0.88, 0.88); }
+  .hard   .level { transform: var(--level-transform) scale3d(0.70, 0.70, 0.70); }
+}
+
+@media (height <= 500px) {
+  .easy   .level { transform: var(--level-transform) scale3d(0.83, 0.83, 0.83); }
+  .medium .level { transform: var(--level-transform) scale3d(0.66, 0.66, 0.66); }
+  .hard   .level { transform: var(--level-transform) scale3d(0.55, 0.55, 0.55); }
+}
+
+@media (width <= 500px) {
+  .easy   .level { transform: var(--level-transform) scale3d(0.94, 0.94, 0.94); }
+  .medium .level { transform: var(--level-transform) scale3d(0.70, 0.70, 0.70); }
+  .hard   .level { transform: var(--level-transform) scale3d(0.56, 0.56, 0.56); }
+}
+
+@media (width <= 400px) {
+  .easy   .level { transform: var(--level-transform) scale3d(0.70, 0.70, 0.70); }
+  .medium .level { transform: var(--level-transform) scale3d(0.53, 0.53, 0.53); }
+  .hard   .level { transform: var(--level-transform) scale3d(0.42, 0.42, 0.42); }
+}
+
+@media (height <= 400px) {
+  .easy   .level { transform: var(--level-transform) scale3d(0.55, 0.55, 0.55); }
+  .medium .level { transform: var(--level-transform) scale3d(0.44, 0.44, 0.44); }
+  .hard   .level { transform: var(--level-transform) scale3d(0.37, 0.37, 0.37); }
 }

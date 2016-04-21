@@ -12,7 +12,7 @@ export default function Level ({ moveTo, playerPosition, tiles }) {
     return cellArray.concat(rowCells);
   }, []);
 
-  return h('main', {
+  return h('main', h('div.level', {
     style: {
       height: `${tiles.length * SQUARE_SIZE}rem`,
       width: `${tiles[0].length * SQUARE_SIZE}rem`,
@@ -20,5 +20,5 @@ export default function Level ({ moveTo, playerPosition, tiles }) {
   }, [
     Player(playerPosition),
     ...cells,
-  ]);
+  ]));
 }

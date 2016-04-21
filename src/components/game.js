@@ -6,7 +6,7 @@ import Progress from 'components/progress';
 import { MAIN_MENU } from 'constants/game-statuses';
 
 export default function Game (props) {
-  let { status } = props;
+  let { currentDifficulty, status } = props;
 
   let children = status === MAIN_MENU ? [
     DifficultyButtons(props),
@@ -17,6 +17,9 @@ export default function Game (props) {
   ];
 
   return h('div#game', {
-    className: status.toLowerCase().replace('_', '-'),
+    className: [
+      currentDifficulty,
+      status,
+    ].join(' ').toLowerCase().replace('_', '-'),
   }, children);
 }
