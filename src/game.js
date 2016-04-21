@@ -3,7 +3,9 @@ import store from 'store';
 import {
   canMoveTo,
   distanceFromPlayer,
+  isFinalLevelComplete,
   maxMovesMet,
+  notifyParentOfCompletion,
   winConditionsMet,
 } from 'helpers';
 import { log, playSoundEffect } from 'util';
@@ -62,7 +64,7 @@ function checkForWinOrLoss () {
   let state = store.getState();
 
   if (winConditionsMet(state)) {
-    win();
+    win(state);
   } else if (maxMovesMet(state)) {
     lose();
   }
@@ -88,10 +90,15 @@ function resetAfterDelay () {
 }
 
 // Congratulates the player then move onto the next level.
-function win () {
-  let { moveCount } = store.getState();
-  log('info', `Completed in ${moveCount} moves.`);
+function win (state) {
+  log('info', `Completed in ${state.moveCount} moves.`);
   store.dispatch({ type: WIN });
   playSoundEffect(WIN_AUDIO);
+
+  if (isFinalLevelComplete(state)) {
+    notifyParentOfCompletion(state);
+    return;
+  }
+
   loadNextLevelAfterDelay();
 }
