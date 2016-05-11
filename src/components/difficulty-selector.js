@@ -6,8 +6,8 @@ import { STARTING_LEVEL_NUMBERS } from 'constants/difficulty';
 export default function DifficultySelector ({ currentDifficulty, loadLevel }) {
   return h('select.difficulty-selector', {
     onchange: evt => {
-      let newDifficulty = evt.target.value;
-      let newLevelNumber = STARTING_LEVEL_NUMBERS[newDifficulty];
+      const newDifficulty = evt.target.value;
+      const newLevelNumber = STARTING_LEVEL_NUMBERS[newDifficulty];
       loadLevel(newLevelNumber);
     },
     title: 'Difficulty',

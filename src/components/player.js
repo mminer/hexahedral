@@ -2,7 +2,7 @@ import { h } from 'virtual-dom';
 import { SQUARE_SIZE } from 'constants/misc';
 
 export default function Player ({ column, row }) {
-  let player = h('div.player', {
+  const player = h('div.player', {
     key: 'player',
     style: {
       top: `${row * SQUARE_SIZE}rem`,

@@ -12,13 +12,13 @@ function init (newTree) {
 
 // Updates the DOM with the virtual tree changes.
 function update (newTree) {
-  let patches = diff(tree, newTree);
+  const patches = diff(tree, newTree);
   rootNode = patch(rootNode, patches);
 }
 
 // Applies the game state to the DOM.
 export default function render (props) {
-  let newTree = Game(props);
+  const newTree = Game(props);
 
   if (!rootNode) {
     init(newTree);

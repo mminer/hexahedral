@@ -30,7 +30,7 @@ export default combineReducers({
 
   maxMoves: createReducer(Infinity, {
     [LOAD_LEVEL] (state, { levelNumber }) {
-      let level = levels[levelNumber];
+      const level = levels[levelNumber];
       return level.maxMoves;
     },
   }),
@@ -47,8 +47,8 @@ export default combineReducers({
 
   playerPosition: createReducer({ row: 0, column: 0 }, {
     [LOAD_LEVEL] (state, { levelNumber }) {
-      let level = levels[levelNumber];
-      let { row, column } = level.playerPosition;
+      const level = levels[levelNumber];
+      const { row, column } = level.playerPosition;
       return { row, column };
     },
 
@@ -73,14 +73,14 @@ export default combineReducers({
 
   tiles: createReducer([[]], {
     [LOAD_LEVEL] (state, { levelNumber }) {
-      let level = levels[levelNumber];
+      const level = levels[levelNumber];
       return level.tiles.map(rowTiles => rowTiles.slice());
     },
 
     [MOVE] (state, { row, column }) {
       // Toggle the tile at the new position.
-      let currentTile = state[row][column];
-      let newTile = currentTile === PRESSED ? UNPRESSED : PRESSED;
+      const currentTile = state[row][column];
+      const newTile = currentTile === PRESSED ? UNPRESSED : PRESSED;
       state = state.map(rowTiles => rowTiles.slice());
       state[row][column] = newTile;
       return state;

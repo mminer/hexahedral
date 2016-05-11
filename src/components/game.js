@@ -6,9 +6,9 @@ import Progress from 'components/progress';
 import { MAIN_MENU } from 'constants/game-statuses';
 
 export default function Game (props) {
-  let { currentDifficulty, status } = props;
+  const { currentDifficulty, status } = props;
 
-  let children = status === MAIN_MENU ? [
+  const children = status === MAIN_MENU ? [
     DifficultyButtons(props),
   ] : [
     Progress(props),

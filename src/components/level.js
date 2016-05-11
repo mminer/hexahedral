@@ -4,8 +4,8 @@ import Cell from 'components/cell';
 import Player from 'components/player';
 
 export default function Level ({ moveTo, playerPosition, tiles }) {
-  let cells = tiles.reduce((cellArray, rowTiles, row) => {
-    let rowCells = rowTiles.map((tile, column) =>
+  const cells = tiles.reduce((cellArray, rowTiles, row) => {
+    const rowCells = rowTiles.map((tile, column) =>
       Cell({ column, moveTo, row, tile })
     );
 

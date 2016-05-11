@@ -8,8 +8,8 @@ const isChrome = navigator.userAgent.toLowerCase().includes('chrome');
 // Creates a Redux reducer that maps action types to handlers.
 export function createReducer (initialState, handlers = {}) {
   // Adapted from http://redux.js.org/docs/recipes/ReducingBoilerplate.html.
-  let reducer = (state = initialState, action) => {
-    let handler = handlers[action.type];
+  const reducer = (state = initialState, action) => {
+    const handler = handlers[action.type];
 
     if (!handler) {
       return state;
@@ -23,9 +23,9 @@ export function createReducer (initialState, handlers = {}) {
 
 // Determines the distance between two points (i.e. with no diagonal movement).
 export function findDistance (position1, position2) {
-  let rowDistance = Math.abs(position1.row - position2.row);
-  let columnDistance = Math.abs(position1.column - position2.column);
-  let distance = rowDistance + columnDistance;
+  const rowDistance = Math.abs(position1.row - position2.row);
+  const columnDistance = Math.abs(position1.column - position2.column);
+  const distance = rowDistance + columnDistance;
   return distance;
 }
 

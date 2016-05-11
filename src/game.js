@@ -13,7 +13,7 @@ import { NEXT_LEVEL_DELAY } from 'constants/misc';
 
 // Loads the given level.
 export function loadLevel (levelNumber) {
-  let levelExists = levelNumber in levels;
+  const levelExists = levelNumber in levels;
 
   if (!levelExists) {
     log('warn', `There is no level ${levelNumber}.`);
@@ -25,21 +25,21 @@ export function loadLevel (levelNumber) {
 
 // Moves the player up, down, left, or right.
 export function move (rowDelta, columnDelta) {
-  let { playerPosition } = store.getState();
-  let row = playerPosition.row + rowDelta;
-  let column = playerPosition.column + columnDelta;
+  const { playerPosition } = store.getState();
+  const row = playerPosition.row + rowDelta;
+  const column = playerPosition.column + columnDelta;
   moveTo(row, column);
 }
 
 // Moves the player to a specific location.
 export function moveTo (row, column) {
-  let state = store.getState();
+  const state = store.getState();
 
   if (!canMoveTo(state, row, column)) {
     return;
   }
 
-  let invalidMoveDistance = distanceFromPlayer(state, row, column) !== 1;
+  const invalidMoveDistance = distanceFromPlayer(state, row, column) !== 1;
 
   // Ensure player only move one spot at a time.
   if (invalidMoveDistance) {
@@ -53,13 +53,13 @@ export function moveTo (row, column) {
 
 // Resets the current level.
 export function reset () {
-  let { currentLevelNumber } = store.getState();
+  const { currentLevelNumber } = store.getState();
   loadLevel(currentLevelNumber);
 }
 
 // Checks whether the level has been won or lost.
 function checkForWinOrLoss () {
-  let state = store.getState();
+  const state = store.getState();
 
   if (winConditionsMet(state)) {
     win();
@@ -70,8 +70,8 @@ function checkForWinOrLoss () {
 
 // Loads the next level after a pause.
 function loadNextLevelAfterDelay () {
-  let { currentLevelNumber } = store.getState();
-  let nextLevelNumber = currentLevelNumber + 1;
+  const { currentLevelNumber } = store.getState();
+  const nextLevelNumber = currentLevelNumber + 1;
   setTimeout(() => loadLevel(nextLevelNumber), NEXT_LEVEL_DELAY);
 }
 
@@ -89,7 +89,7 @@ function resetAfterDelay () {
 
 // Congratulates the player then move onto the next level.
 function win () {
-  let { moveCount } = store.getState();
+  const { moveCount } = store.getState();
   log('info', `Completed in ${moveCount} moves.`);
   store.dispatch({ type: WIN });
   playSoundEffect(WIN_AUDIO);

@@ -20,7 +20,7 @@ export default function LevelButton ({
 }) {
   // Only allow jumping to completed levels (unless we're in dev mode).
   // Jumping to the current level effectively resets it.
-  let isLevelAvailable = DEV_MODE_ENABLED ||
+  const isLevelAvailable = DEV_MODE_ENABLED ||
     (levelNumber <= currentLevelNumber);
 
   return h('button.level-button', {

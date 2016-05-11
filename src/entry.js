@@ -14,24 +14,24 @@ const keyHandlers = {
   [R]: reset,
 };
 
-let keysCurrentlyPressed = new Set();
+const keysCurrentlyPressed = new Set();
 
 document.addEventListener('keydown', evt => {
-  let { keyCode } = evt;
+  const { keyCode } = evt;
 
   // Prevent keys from repeating.
   if (keysCurrentlyPressed.has(keyCode)) {
     return;
   }
 
-  let isPlaying = store.getState().status === PLAYING;
+  const isPlaying = store.getState().status === PLAYING;
 
   // Ignore key presses when we're transitioning between levels.
   if (!isPlaying) {
     return;
   }
 
-  let handler = keyHandlers[keyCode];
+  const handler = keyHandlers[keyCode];
 
   // Ignore keys that we lack a handler for.
   if (!handler) {
@@ -51,7 +51,7 @@ document.addEventListener('keyup', evt => {
 
 // Provides the UI with the game state.
 function renderProps () {
-  let props = store.getState();
+  const props = store.getState();
   props.loadLevel = loadLevel;
   props.moveTo = moveTo;
   render(props);

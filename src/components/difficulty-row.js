@@ -7,7 +7,7 @@ export default function DifficultyRow ({
   currentLevelNumber,
   loadLevel,
 }) {
-  let levelNumbers = levelNumbersInDifficulty(currentDifficulty);
+  const levelNumbers = levelNumbersInDifficulty(currentDifficulty);
 
   return h('div.difficulty-row', levelNumbers.map(
     levelNumber => LevelButton({ currentLevelNumber, levelNumber, loadLevel })

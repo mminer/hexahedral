@@ -1,6 +1,6 @@
 // Splits level rows into individual tiles.
 function createLevelTiles (rows) {
-  let levelTiles = rows.map(row => row.split(''));
+  const levelTiles = rows.map(row => row.split(''));
   return levelTiles;
 }
 
