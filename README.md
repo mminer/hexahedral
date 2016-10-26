@@ -1,7 +1,7 @@
 # Hexahedral
 
-This is my submission to the 2016 [Global Game Jam](http://globalgamejam.org/).
-Play the game by visiting http://matthewminer.com/hexahedral.
+This is my [submission](http://globalgamejam.org/2016/games/hexahedral) to the
+2016 Global Game Jam. Visit http://matthewminer.com/hexahedral to play.
 
 ![Screenshot](https://raw.github.com/mminer/hexahedral/master/screenshot.png)
 
