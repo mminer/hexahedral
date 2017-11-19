@@ -5,10 +5,10 @@ import DifficultySelector from '../components/difficulty-selector';
 export default function LevelNavigator ({
   currentDifficulty,
   currentLevelNumber,
-  loadLevel,
+  maxLevelReached,
 }) {
   return h('nav', [
-    DifficultySelector({ currentDifficulty, loadLevel }),
-    DifficultyRow({ currentDifficulty, currentLevelNumber, loadLevel }),
+    DifficultySelector({ currentDifficulty }),
+    DifficultyRow({ currentDifficulty, currentLevelNumber, maxLevelReached }),
   ]);
 }

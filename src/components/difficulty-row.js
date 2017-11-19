@@ -5,11 +5,15 @@ import { levelNumbersInDifficulty } from '../util';
 export default function DifficultyRow ({
   currentDifficulty,
   currentLevelNumber,
-  loadLevel,
+  maxLevelReached,
 }) {
   const levelNumbers = levelNumbersInDifficulty(currentDifficulty);
 
   return h('div.difficulty-row', levelNumbers.map(
-    levelNumber => LevelButton({ currentLevelNumber, levelNumber, loadLevel })
+    levelNumber => LevelButton({
+      currentLevelNumber,
+      levelNumber,
+      maxLevelReached,
+    })
   ));
 }

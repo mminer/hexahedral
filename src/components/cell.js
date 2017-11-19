@@ -1,6 +1,7 @@
 import { h } from 'virtual-dom';
 import { SQUARE_SIZE } from '../constants/misc';
 import { BROKEN, PRESSED, UNPRESSED } from '../constants/tile-codes';
+import { moveTo } from '../game';
 
 const classNames = {
   [BROKEN]: 'broken',
@@ -8,7 +9,7 @@ const classNames = {
   [UNPRESSED]: 'unpressed',
 };
 
-export default function Cell ({ column, moveTo, row, tile }) {
+export default function Cell ({ column, row, tile }) {
   return h('div.cell', {
     className: classNames[tile],
     key: `${row} ${column}`,

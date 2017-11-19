@@ -2,7 +2,7 @@ import './main.css';
 import fastClick from 'fastclick';
 import render from './render';
 import store from './store';
-import { loadLevel, move, moveTo, reset } from './game';
+import { move, reset } from './game';
 import { PLAYING } from './constants/game-statuses';
 import { DOWN, LEFT, R, RIGHT, UP } from './constants/key-codes';
 
@@ -52,8 +52,6 @@ document.addEventListener('keyup', evt => {
 // Provides the UI with the game state.
 function renderProps () {
   const props = store.getState();
-  props.loadLevel = loadLevel;
-  props.moveTo = moveTo;
   render(props);
 }
 

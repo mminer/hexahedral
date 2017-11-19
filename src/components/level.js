@@ -2,11 +2,12 @@ import { h } from 'virtual-dom';
 import { SQUARE_SIZE } from '../constants/misc';
 import Cell from '../components/cell';
 import Player from '../components/player';
+import { moveTo } from '../game';
 
-export default function Level ({ moveTo, playerPosition, tiles }) {
+export default function Level ({ playerPosition, tiles }) {
   const cells = tiles.reduce((cellArray, rowTiles, row) => {
     const rowCells = rowTiles.map((tile, column) =>
-      Cell({ column, moveTo, row, tile })
+      Cell({ column, row, tile })
     );
 
     return cellArray.concat(rowCells);

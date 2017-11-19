@@ -1,30 +1,29 @@
 import { h } from 'virtual-dom';
 import { DEV_MODE_ENABLED } from '../constants/prefs';
+import { loadLevel } from '../game';
 
-function getClassName (levelNumber, currentLevelNumber) {
-  let className = '';
-
-  if (levelNumber < currentLevelNumber) {
-    className = 'complete';
-  } else if (levelNumber === currentLevelNumber) {
-    className = 'current';
+function getClassName (levelNumber, currentLevelNumber, maxLevelReached) {
+  if (levelNumber === currentLevelNumber) {
+    return 'current';
+  } else if (levelNumber <= maxLevelReached) {
+    return 'complete';
+  } else {
+    return '';
   }
-
-  return className;
 }
 
 export default function LevelButton ({
   currentLevelNumber,
   levelNumber,
-  loadLevel,
+  maxLevelReached,
 }) {
   // Only allow jumping to completed levels (unless we're in dev mode).
   // Jumping to the current level effectively resets it.
   const isLevelAvailable = DEV_MODE_ENABLED ||
-    (levelNumber <= currentLevelNumber);
+    (levelNumber <= maxLevelReached);
 
   return h('button.level-button', {
-    className: getClassName(levelNumber, currentLevelNumber),
+    className: getClassName(levelNumber, currentLevelNumber, maxLevelReached),
     key: levelNumber,
     onclick: isLevelAvailable ? () => loadLevel(levelNumber) : null,
     title: `Level ${levelNumber}`,
