@@ -1,6 +1,6 @@
-import levels from 'levels';
-import { EASY, MEDIUM, HARD } from 'constants/difficulty-levels';
-import { AUDIO_DISABLED, DEV_MODE_ENABLED } from 'constants/prefs';
+import levels from './levels';
+import { EASY, MEDIUM, HARD } from './constants/difficulty-levels';
+import { AUDIO_DISABLED, DEV_MODE_ENABLED } from './constants/prefs';
 
 const allLevelNumbers = levels.map((level, levelNumber) => levelNumber);
 const isChrome = navigator.userAgent.toLowerCase().includes('chrome');

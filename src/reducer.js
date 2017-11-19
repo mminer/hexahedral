@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import levels from 'levels';
-import { createReducer } from 'util';
-import { LOAD_LEVEL, LOSE, MOVE, WIN } from 'constants/actions';
-import { STARTING_LEVEL_NUMBERS } from 'constants/difficulty';
-import { EASY, MEDIUM, HARD } from 'constants/difficulty-levels';
-import { LOST, MAIN_MENU, PLAYING, WON } from 'constants/game-statuses';
-import { PRESSED, UNPRESSED } from 'constants/tile-codes';
+import levels from './levels';
+import { createReducer } from './util';
+import { LOAD_LEVEL, LOSE, MOVE, WIN } from './constants/actions';
+import { STARTING_LEVEL_NUMBERS } from './constants/difficulty';
+import { EASY, MEDIUM, HARD } from './constants/difficulty-levels';
+import { LOST, MAIN_MENU, PLAYING, WON } from './constants/game-statuses';
+import { PRESSED, UNPRESSED } from './constants/tile-codes';
 
 export default combineReducers({
   currentDifficulty: createReducer(EASY, {

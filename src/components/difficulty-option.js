@@ -1,5 +1,5 @@
 import { h } from 'virtual-dom';
-import { DIFFICULTY_LABELS } from 'constants/difficulty';
+import { DIFFICULTY_LABELS } from '../constants/difficulty';
 
 export default function DifficultyOption ({ currentDifficulty, difficulty }) {
   return h('option.difficulty-option', {

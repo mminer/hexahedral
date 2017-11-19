@@ -2,7 +2,7 @@ import { h } from 'virtual-dom';
 import {
   DIFFICULTY_LABELS,
   STARTING_LEVEL_NUMBERS,
-} from 'constants/difficulty';
+} from '../constants/difficulty';
 
 export default function DifficultyButton ({ difficulty, loadLevel }) {
   return h('button.difficulty-button', {

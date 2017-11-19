@@ -1,5 +1,5 @@
-import { findDistance } from 'util';
-import { PRESSED, UNPRESSED } from 'constants/tile-codes';
+import { findDistance } from './util';
+import { PRESSED, UNPRESSED } from './constants/tile-codes';
 
 // Determines whether the player is allowed to move to the given coordinates.
 export function canMoveTo (state, row, column) {

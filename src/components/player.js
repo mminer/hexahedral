@@ -1,5 +1,5 @@
 import { h } from 'virtual-dom';
-import { SQUARE_SIZE } from 'constants/misc';
+import { SQUARE_SIZE } from '../constants/misc';
 
 export default function Player ({ column, row }) {
   const player = h('div.player', {

@@ -23,7 +23,7 @@ the isometric projection), or click on an adjacent pink or blue cube.
 After cloning the repository, run the following.
 
     npm install
-    npm start
+    npm run build
 
 Then open *build/index.html* in your browser.
 

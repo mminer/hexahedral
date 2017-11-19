@@ -1,5 +1,5 @@
 import { h } from 'virtual-dom';
-import { PROGRESS_STEP_SIZE } from 'constants/misc';
+import { PROGRESS_STEP_SIZE } from '../constants/misc';
 
 export default function Progress ({ maxMoves, moveCount }) {
   return h('header', {

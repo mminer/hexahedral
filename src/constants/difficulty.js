@@ -1,4 +1,4 @@
-import { EASY, MEDIUM, HARD } from 'constants/difficulty-levels';
+import { EASY, MEDIUM, HARD } from '../constants/difficulty-levels';
 
 export const DIFFICULTY_LABELS = {
   [EASY]: 'Easy',

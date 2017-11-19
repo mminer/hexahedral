@@ -1,6 +1,6 @@
 import { h } from 'virtual-dom';
-import { SQUARE_SIZE } from 'constants/misc';
-import { BROKEN, PRESSED, UNPRESSED } from 'constants/tile-codes';
+import { SQUARE_SIZE } from '../constants/misc';
+import { BROKEN, PRESSED, UNPRESSED } from '../constants/tile-codes';
 
 const classNames = {
   [BROKEN]: 'broken',

@@ -1,15 +1,15 @@
-import levels from 'levels';
-import store from 'store';
+import levels from './levels';
+import store from './store';
 import {
   canMoveTo,
   distanceFromPlayer,
   maxMovesMet,
   winConditionsMet,
-} from 'helpers';
-import { log, playSoundEffect } from 'util';
-import { LOAD_LEVEL, LOSE, MOVE, WIN } from 'constants/actions';
-import { LOSE_AUDIO, MOVE_AUDIO, WIN_AUDIO } from 'constants/audio';
-import { NEXT_LEVEL_DELAY } from 'constants/misc';
+} from './helpers';
+import { log, playSoundEffect } from './util';
+import { LOAD_LEVEL, LOSE, MOVE, WIN } from './constants/actions';
+import { LOSE_AUDIO, MOVE_AUDIO, WIN_AUDIO } from './constants/audio';
+import { NEXT_LEVEL_DELAY } from './constants/misc';
 
 // Loads the given level.
 export function loadLevel (levelNumber) {

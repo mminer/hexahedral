@@ -1,6 +1,6 @@
 import { h } from 'virtual-dom';
-import DifficultyRow from 'components/difficulty-row';
-import DifficultySelector from 'components/difficulty-selector';
+import DifficultyRow from '../components/difficulty-row';
+import DifficultySelector from '../components/difficulty-selector';
 
 export default function LevelNavigator ({
   currentDifficulty,

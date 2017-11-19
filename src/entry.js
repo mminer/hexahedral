@@ -1,10 +1,10 @@
 import './main.css';
 import fastClick from 'fastclick';
-import render from 'render';
-import store from 'store';
-import { loadLevel, move, moveTo, reset } from 'game';
-import { PLAYING } from 'constants/game-statuses';
-import { DOWN, LEFT, R, RIGHT, UP } from 'constants/key-codes';
+import render from './render';
+import store from './store';
+import { loadLevel, move, moveTo, reset } from './game';
+import { PLAYING } from './constants/game-statuses';
+import { DOWN, LEFT, R, RIGHT, UP } from './constants/key-codes';
 
 const keyHandlers = {
   [LEFT]: () => move(0, -1),

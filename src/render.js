@@ -1,5 +1,5 @@
 import { create, diff, patch } from 'virtual-dom';
-import Game from 'components/game';
+import Game from './components/game';
 
 let tree = null;
 let rootNode = null;

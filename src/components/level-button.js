@@ -1,5 +1,5 @@
 import { h } from 'virtual-dom';
-import { DEV_MODE_ENABLED } from 'constants/prefs';
+import { DEV_MODE_ENABLED } from '../constants/prefs';
 
 function getClassName (levelNumber, currentLevelNumber) {
   let className = '';

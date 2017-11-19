@@ -1,6 +1,6 @@
 import { h } from 'virtual-dom';
-import LevelButton from 'components/level-button';
-import { levelNumbersInDifficulty } from 'util';
+import LevelButton from '../components/level-button';
+import { levelNumbersInDifficulty } from '../util';
 
 export default function DifficultyRow ({
   currentDifficulty,

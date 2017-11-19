@@ -1,7 +1,7 @@
 import { h } from 'virtual-dom';
-import { SQUARE_SIZE } from 'constants/misc';
-import Cell from 'components/cell';
-import Player from 'components/player';
+import { SQUARE_SIZE } from '../constants/misc';
+import Cell from '../components/cell';
+import Player from '../components/player';
 
 export default function Level ({ moveTo, playerPosition, tiles }) {
   const cells = tiles.reduce((cellArray, rowTiles, row) => {
