@@ -23,7 +23,7 @@
 }
 
 @keyframes player-bob {
-  50% { transform: translateZ(13rem); }
+  50% { transform: translateZ(14rem); }
 }
 
 *,
@@ -339,7 +339,7 @@ nav {
   margin: 3.5rem;
   pointer-events: none;
   transform-style: preserve-3d;
-  transform: translateZ(15rem);
+  transform: translateZ(12rem);
   transition: all 0.2s;
 
   /* Left */
